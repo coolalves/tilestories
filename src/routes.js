@@ -1,13 +1,28 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createStackNavigator } from '@react-navigation/stack';
 import Map from './pages/map/Map';
 import Profile from "./pages/profile/Profile";
 import Scoreboard from "./pages/scoreboard/Scoreboard";
 import HomeButton from "./components/HomeButton";
+import CameraScreen from "./pages/map/CameraScreen";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useFonts } from 'expo-font';
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
+const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
+
+const StackNavigator = () => {
+    return (
+        <GestureHandlerRootView style={{ flex: 1 }}>
+            <Stack.Navigator>
+                <Stack.Screen name="Map" component={Map} options={{headerShown:false}}/>
+                <Stack.Screen name="Camera" component={CameraScreen} options={{headerShown:false}}/>
+            </Stack.Navigator>
+        </GestureHandlerRootView>
+    );
+};
 
 export default function Routes() {
     /*const [loaded] = useFonts({
@@ -15,6 +30,7 @@ export default function Routes() {
       });*/
 
     return (
+
         <Tab.Navigator
             initialRouteName="Home"
             screenOptions={{
@@ -49,9 +65,7 @@ export default function Routes() {
                     )
                 }}
             />
-
-
-            <Tab.Screen name="Home" component={Map}
+            <Tab.Screen name="Home" component={StackNavigator}
                 options={{
                     tabBarLabel: '',
                     tabBarIcon: ({ size, color }) => (
@@ -59,7 +73,6 @@ export default function Routes() {
                     )
                 }}
             />
-
             <Tab.Screen name="Account" component={Profile}
                 options={{
                     tabBarLabel: '',
@@ -68,7 +81,6 @@ export default function Routes() {
                     )
                 }}
             />
-
         </Tab.Navigator>
     )
 }
