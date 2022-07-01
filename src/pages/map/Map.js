@@ -1,6 +1,6 @@
 import * as React from "react";
 import MapView from "react-native-maps";
-import { StyleSheet, Text, View, Dimensions, Pressable } from "react-native";
+import { StyleSheet, Text, View, Dimensions, Pressable, Image } from "react-native";
 import { Marker, Callout } from "react-native-maps";
 import * as Location from "expo-location";
 import { useState, useEffect } from "react";
@@ -19,7 +19,7 @@ export default function Map({ navigation: { navigate } }) {
         return (
             <Pressable
                 onPress={() =>
-                    navigate('Camera')
+                    navigate('Camera', { location })
                 }
                 style={buttonstyles.buttonContainer}
             >
@@ -104,12 +104,23 @@ export default function Map({ navigation: { navigate } }) {
                     description="test description"
                     image={require("../../../assets/imgs/tileicon.png")}
                 >
-                    <Callout>
-                        <Text>I'm Here! </Text>
+                    <Callout tooltip>
+                        <View>
+                            <View style={callouts.bubble}>
+                                <Text style={callouts.title}> Old train station facade </Text>
+                                <Text style={callouts.about}> Old train station facade </Text>
+                                <Image
+                                    style={callouts.image}
+                                    //nao encontra a imagem source={require("../../../assets/imgs/oldstation.jpg")}
+                                />
+                            </View>
+                            <View style={callouts.arrowBorder} />
+                            <View style={callouts.arrow} />
+                        </View>
+
                     </Callout>
                 </Marker>
             </MapView>
-
         </View>
 
 
@@ -140,4 +151,46 @@ const buttonstyles = StyleSheet.create({
         backgroundColor: "#fff",
         borderRadius: 6,
     }
+});
+
+const callouts = StyleSheet.create({
+    bubble: {
+        flexDirection: 'column',
+        alignSelf: 'flex-start',
+        backgroundColor: '#fff',
+        borderRadius: 6,
+        borderColor: '#ccc',
+        borderWidth: 0.5,
+        padding: 15,
+        width: 150,
+    },
+    title: {
+        fontSize: 16,
+        marginBottom: 5,
+    },
+    about: {
+        fontSize: 10,
+        marginBottom: 5,
+    },
+    arrow: {
+        backgroundColor: 'transparent',
+        borderColor: 'transparent',
+        borderTopColor: '#fff',
+        borderWidth: 16,
+        alignSelf: 'center',
+        marginTop: -32,
+    },
+    arrowBorder: {
+        backgroundColor: 'transparent',
+        borderColor: 'transparent',
+        borderTopColor: '#007a87',
+        borderWidth: 16,
+        alignSelf: 'center',
+        marginTop: -0.5,
+        // marginBottom: -15
+    },
+    image: {
+        width: "100%",
+        height: 80,
+    },
 });

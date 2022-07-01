@@ -6,7 +6,8 @@ import * as MediaLibrary from 'expo-media-library'
 import { StatusBar } from "expo-status-bar";
 import { shareAsync } from "expo-sharing";
 
-export default function CameraScreen() {
+export default function CameraScreen(location) {
+    //console.log(location);
     let cameraRef = useRef();
     const [hasCameraPermission, setHasCameraPermission] = useState();
     const [hasMediaLibraryPermission, setHasMediaLibraryPermission] = useState();
