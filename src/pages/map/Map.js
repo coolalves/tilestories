@@ -24,6 +24,7 @@ export default function Map({ navigation: { navigate } }) {
                 style={buttonstyles.buttonContainer}
             >
                 <MaterialIcons name="add-a-photo" size={28} color="grey" />
+                
             </Pressable>
         );
     };
@@ -79,6 +80,7 @@ export default function Map({ navigation: { navigate } }) {
 
         <View style={styles.container}>
             <CameraButton />
+
             <MapView
                 ref={mapRef}
                 style={styles.map}
@@ -107,17 +109,16 @@ export default function Map({ navigation: { navigate } }) {
                     <Callout tooltip>
                         <View>
                             <View style={callouts.bubble}>
-                                <Text style={callouts.title}> Old train station facade </Text>
-                                <Text style={callouts.about}> Old train station facade </Text>
+                                <Text style={callouts.title}>Old train station facade</Text>
+                                {/* <Text>A short description</Text> */}
                                 <Image
                                     style={callouts.image}
-                                    //nao encontra a imagem source={require("../../../assets/imgs/oldstation.jpg")}
+                                    source={require('../../../assets/imgs/places/station.jpg')}
                                 />
                             </View>
                             <View style={callouts.arrowBorder} />
                             <View style={callouts.arrow} />
                         </View>
-
                     </Callout>
                 </Marker>
             </MapView>
@@ -159,28 +160,21 @@ const callouts = StyleSheet.create({
         alignSelf: 'flex-start',
         backgroundColor: '#fff',
         borderRadius: 6,
-        borderColor: '#ccc',
+        borderColor: 'transparent',
         borderWidth: 0.5,
         padding: 15,
         width: 150,
-    },
-    title: {
-        fontSize: 16,
-        marginBottom: 5,
-    },
-    about: {
-        fontSize: 10,
-        marginBottom: 5,
-    },
-    arrow: {
+      },
+      // Arrow below the bubble
+      arrow: {
         backgroundColor: 'transparent',
         borderColor: 'transparent',
         borderTopColor: '#fff',
         borderWidth: 16,
         alignSelf: 'center',
         marginTop: -32,
-    },
-    arrowBorder: {
+      },
+      arrowBorder: {
         backgroundColor: 'transparent',
         borderColor: 'transparent',
         borderTopColor: '#007a87',
@@ -188,9 +182,16 @@ const callouts = StyleSheet.create({
         alignSelf: 'center',
         marginTop: -0.5,
         // marginBottom: -15
-    },
-    image: {
+      },
+      // Character name
+      title: {
+        fontSize: 14,
+        marginBottom: 5,
+      },
+      // Character image
+      image: {
         width: "100%",
         height: 80,
-    },
+       
+      },
 });
