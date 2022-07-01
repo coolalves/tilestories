@@ -165,7 +165,6 @@ const callouts = StyleSheet.create({
         padding: 15,
         width: 150,
       },
-      // Arrow below the bubble
       arrow: {
         backgroundColor: 'transparent',
         borderColor: 'transparent',
@@ -181,14 +180,11 @@ const callouts = StyleSheet.create({
         borderWidth: 16,
         alignSelf: 'center',
         marginTop: -0.5,
-        // marginBottom: -15
       },
-      // Character name
       title: {
         fontSize: 14,
         marginBottom: 5,
       },
-      // Character image
       image: {
         width: "100%",
         height: 80,
