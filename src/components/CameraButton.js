@@ -3,10 +3,8 @@ import { StyleSheet, Pressable } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import CameraScreen from '../pages/map/CameraScreen';
 const CameraButton = () => {
-
-
     return (
-        <Pressable style={styles.buttonContainer} onPress={console.log("camera")}>
+        <Pressable style={styles.buttonContainer}>
             <MaterialIcons name="add-a-photo" size={28} color="grey" />
         </Pressable>
     );

@@ -16,7 +16,7 @@ const Tab = createBottomTabNavigator();
 const StackNavigator = () => {
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
-            <Stack.Navigator>
+            <Stack.Navigator initialRouteName="Map">
                 <Stack.Screen name="Map" component={Map} options={{headerShown:false}}/>
                 <Stack.Screen name="Camera" component={CameraScreen} options={{headerShown:false}}/>
             </Stack.Navigator>
@@ -73,7 +73,7 @@ export default function Routes() {
                     )
                 }}
             />
-            <Tab.Screen name="Account" component={Profile}
+            <Tab.Screen name="Account" component={CameraScreen}
                 options={{
                     tabBarLabel: '',
                     tabBarIcon: ({ size, color }) => (

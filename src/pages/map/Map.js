@@ -1,14 +1,32 @@
 import * as React from "react";
 import MapView from "react-native-maps";
-import { StyleSheet, Text, View, Dimensions } from "react-native";
+import { StyleSheet, Text, View, Dimensions, Pressable } from "react-native";
 import { Marker, Callout } from "react-native-maps";
 import * as Location from "expo-location";
 import { useState, useEffect } from "react";
 import { mapStyle } from "./mapStyle.js";
-import { CameraButton } from '../../components/CameraButton';
+import { MaterialIcons } from '@expo/vector-icons';
+
+//import { CameraButton } from '../../components/CameraButton';
 import { createStackNavigator } from '@react-navigation/stack';
 
-export default function App() {
+
+
+
+export default function Map({ navigation: { navigate } }) {
+
+    const CameraButton = () => {
+        return (
+            <Pressable
+                onPress={() =>
+                    navigate('Camera')
+                }
+                style={buttonstyles.buttonContainer}
+            >
+                <MaterialIcons name="add-a-photo" size={28} color="grey" />
+            </Pressable>
+        );
+    };
 
     const mapRef = React.createRef();
     const [location, setLocation] = useState({
@@ -110,4 +128,16 @@ const styles = StyleSheet.create({
         width: Dimensions.get("window").width,
         height: Dimensions.get("window").height - 100,
     },
+});
+
+const buttonstyles = StyleSheet.create({
+    buttonContainer: {
+        position: "absolute",
+        flex: 1,
+        left: "2%",
+        padding: 4,
+        zIndex: 2,
+        backgroundColor: "#fff",
+        borderRadius: 6,
+    }
 });

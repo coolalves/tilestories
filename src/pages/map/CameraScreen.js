@@ -35,9 +35,9 @@ export default function CameraScreen() {
             exif: true
         };
 
-        let newPhoto = await cameraRef.current.takePictrueAsync(options);
+        let newPhoto = await cameraRef.current.takePictureAsync(options);
         setPhoto(newPhoto);
-    }
+    };
 
     if (photo) {
         let sharePhoto = () => {
@@ -48,7 +48,7 @@ export default function CameraScreen() {
 
         let savePhoto = () => {
             MediaLibrary.saveToLibraryAsync(photo.uri).then(() => {
-                setPhoto(undefined)
+                setPhoto(undefined);
             });
         };
 
@@ -63,8 +63,8 @@ export default function CameraScreen() {
     }
 
     return (
-        <Camera style={styles.container}>
-            <View>
+        <Camera style={styles.container} ref={cameraRef}>
+            <View style={styles.buttonContainer}>
                 <Button title="Take Photo" onPress={takePhoto} />
             </View>
             <StatusBar style="auto" />
