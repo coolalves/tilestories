@@ -30,7 +30,6 @@ export default function Routes() {
       });*/
 
     return (
-
         <Tab.Navigator
             initialRouteName="Home"
             screenOptions={{
@@ -81,6 +80,7 @@ export default function Routes() {
                     )
                 }}
             />
+            
         </Tab.Navigator>
     )
 }
