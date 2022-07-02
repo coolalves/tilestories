@@ -19,114 +19,131 @@ export default function Map({ navigation: { navigate } }) {
         return (
             <Pressable
                 onPress={() =>
-                    navigate('Camera', { location })
-                }
-                style={buttonstyles.buttonContainer}
-            >
-                <MaterialIcons name="add-a-photo" size={28} color="grey" />
-                
-            </Pressable>
-        );
-    };
-
-    const mapRef = React.createRef();
-    const [location, setLocation] = useState({
-        latitude: 40.64422,
-        longitude: -8.64071,
-        latitudeDelta: 0.001,
-        longitudeDelta: 0.001,
-    });
-    const [errorMsg, setErrorMsg] = useState(null);
-
-    useEffect(() => {
-        (async () => {
-            let { status } = await Location.requestForegroundPermissionsAsync();
-            if (status !== 'granted') {
-                setErrorMsg('Permission to access location was denied');
-                return;
-            }
-
-            let location = await Location.getCurrentPositionAsync({
-                accuracy: Location.Accuracy.Balanced,
-                enableHighAccuracy: true,
-                timeInterval: 5
-            });
-            setLocation(location);
-        })();
-    }, []);
-
-    //console.log(location)
-
-    const userLocationParam = {
-        latitude: 40.64422,
-        longitude: -8.64071,
-        latitudeDelta: 0.001,
-        longitudeDelta: 0.001,
+                    passLocationToCamera()
     }
+    style = { buttonstyles.buttonContainer }
+        >
+        <MaterialIcons name="add-a-photo" size={28} color="grey" />
+
+            </Pressable >
+        );
+};
+
+const mapRef = React.createRef();
+const [location, setLocation] = useState({
+    latitude: 40.64422,
+    longitude: -8.64071,
+    latitudeDelta: 0.001,
+    longitudeDelta: 0.001,
+});
+const [errorMsg, setErrorMsg] = useState(null);
+
+useEffect(() => {
+    (async () => {
+        let { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== 'granted') {
+            setErrorMsg('Permission to access location was denied');
+            return;
+        }
+
+        let location = await Location.getCurrentPositionAsync({
+            accuracy: Location.Accuracy.Balanced,
+            enableHighAccuracy: true,
+            timeInterval: 5
+        });
+        setLocation(location);
+    })();
+}, []);
+
+const passLocationToCamera = async () => {
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    try {
+        if (status !== 'granted') {
+            setErrorMsg('Permission to access location was denied');
+            return;
+        } else {
+            let location = await Location.getLastKnownPositionAsync();
+            setLocation(location);
+        }
+    } catch (error) {
+        console.log(error);
+    }
+    //console.log(location);
+    navigate('Camera', { location });
+} //vai buscar a ultima localização conhecida do utilizador para passar via props para o componente da camara e posteriormente abre a camera
+
+//console.log(location)
+
+const userLocationParam = {
+    latitude: 40.64422,
+    longitude: -8.64071,
+    latitudeDelta: 0.001,
+    longitudeDelta: 0.001,
+}
 
 
 
-    const goToCurrentPosition = () => {
-        mapRef.current.animateToRegion(userLocationParam, 2000);
-        //<Button onPress={goToCurrentPosition} title="current position" /> botao de ir para localizaçao
-    };
+const goToCurrentPosition = () => {
+    mapRef.current.animateToRegion(userLocationParam, 2000);
+    //<Button onPress={goToCurrentPosition} title="current position" /> botao de ir para localizaçao
+};
 
-    //let userLatitude = userLocation.coords.latitude;
-    //let userLongitude = userLocation.coords.longitude;
-    //console.log(userLatitude + userLongitude + "deu")
+//let userLatitude = userLocation.coords.latitude;
+//let userLongitude = userLocation.coords.longitude;
+//console.log(userLatitude + userLongitude + "deu")
 
-    return (
+return (
 
 
-        <View style={styles.container}>
-            <CameraButton />
+    <View style={styles.container}>
+        <CameraButton />
 
-            <MapView
-                ref={mapRef}
-                style={styles.map}
-                customMapStyle={mapStyle}
-                initialRegion={{
+        <MapView
+            ref={mapRef}
+            style={styles.map}
+            customMapStyle={mapStyle}
+            initialRegion={{
+                latitude: 40.64422,
+                longitude: -8.64071,
+                latitudeDelta: 0.001,
+                longitudeDelta: 0.001,
+            }}
+            showsUserLocation={true}
+            followsUserLocation={true}
+            showsMyLocationButton={true}
+            showsBuildings={true}
+            showsIndoorLevelPicker={true}
+        >
+            <Marker
+                coordinate={{
                     latitude: 40.64422,
                     longitude: -8.64071,
-                    latitudeDelta: 0.001,
-                    longitudeDelta: 0.001,
                 }}
-                showsUserLocation={true}
-                followsUserLocation={true}
-                showsMyLocationButton={true}
-                showsBuildings={true}
-                showsIndoorLevelPicker={true}
+                title="Azulejos da Antiga Estação"
+                description="test description"
+                image={require("../../../assets/imgs/tileicon.png")}
             >
-                <Marker
-                    coordinate={{
-                        latitude: 40.64422,
-                        longitude: -8.64071,
-                    }}
-                    title="Azulejos da Antiga Estação"
-                    description="test description"
-                    image={require("../../../assets/imgs/tileicon.png")}
-                >
-                    <Callout tooltip>
-                        <View>
-                            <View style={callouts.bubble}>
-                                <Text style={callouts.title}>Old train station facade</Text>
-                                {/* <Text>A short description</Text> */}
-                                <Image
-                                    style={callouts.image}
-                                    source={require('../../../assets/imgs/places/station.jpg')}
-                                />
-                            </View>
-                            <View style={callouts.arrowBorder} />
-                            <View style={callouts.arrow} />
+                <Callout tooltip>
+                    <View>
+                        <View style={callouts.bubble}>
+                            <Text style={callouts.title}>Old train station facade</Text>
+                            {/* <Text>A short description</Text> */}
+                            <Image
+                                style={callouts.image}
+                                source={require('../../../assets/imgs/places/station.jpg')}
+                            />
                         </View>
-                    </Callout>
-                </Marker>
-            </MapView>
-        </View>
+                        <View style={callouts.arrowBorder} />
+                        <View style={callouts.arrow} />
+                    </View>
+                </Callout>
+            </Marker>
+        </MapView>
+    </View>
 
 
 
-    );
+);
 }
 
 const styles = StyleSheet.create({
@@ -164,30 +181,30 @@ const callouts = StyleSheet.create({
         borderWidth: 0.5,
         padding: 15,
         width: 150,
-      },
-      arrow: {
+    },
+    arrow: {
         backgroundColor: 'transparent',
         borderColor: 'transparent',
         borderTopColor: '#fff',
         borderWidth: 16,
         alignSelf: 'center',
         marginTop: -32,
-      },
-      arrowBorder: {
+    },
+    arrowBorder: {
         backgroundColor: 'transparent',
         borderColor: 'transparent',
         borderTopColor: '#007a87',
         borderWidth: 16,
         alignSelf: 'center',
         marginTop: -0.5,
-      },
-      title: {
+    },
+    title: {
         fontSize: 14,
         marginBottom: 5,
-      },
-      image: {
+    },
+    image: {
         width: "100%",
         height: 80,
-       
-      },
+
+    },
 });
