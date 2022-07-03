@@ -5,6 +5,7 @@ import { Camera } from "expo-camera";
 import * as MediaLibrary from 'expo-media-library'
 import { StatusBar } from "expo-status-bar";
 import { shareAsync } from "expo-sharing";
+import Pressable from "react-native/Libraries/Components/Pressable/Pressable";
 
 export default function CameraScreen(location) {
     //console.log(location);
@@ -54,9 +55,11 @@ export default function CameraScreen(location) {
         };
 
         return (
-            <SafeAreaView style={styles.container}>
+            <SafeAreaView style={styles.cameraContainer}>
                 <Image style={styles.preview} source={{ uri: "data:image/jpg;base64," + photo.base64 }} />
-                <Button title="Share" onPress={sharePhoto} />
+                <Pressable style={styles.buttonContainer} onPress={sharePhoto} >
+                    <Text> Share</Text>
+                </ Pressable>
                 {hasMediaLibraryPermission ? <Button title="Save" onPress={savePhoto} /> : undefined}
                 <Button title="Discard" onPress={() => setPhoto(undefined)} />
             </SafeAreaView>
@@ -64,24 +67,34 @@ export default function CameraScreen(location) {
     }
 
     return (
-        <Camera style={styles.container} ref={cameraRef}>
-            <View style={styles.buttonContainer}>
-                <Button title="Take Photo" onPress={takePhoto} />
-            </View>
+        <Camera style={styles.cameraContainer} ref={cameraRef}>
+            <Pressable style={styles.buttonContainer} onPress={takePhoto}>
+                <Text style={styles.buttonText}> Take Photo</Text>
+            </Pressable>
             <StatusBar style="auto" />
         </Camera>
     );
 }
 
 const styles = StyleSheet.create({
-    container: {
+    cameraContainer: {
         flex: 1,
         alignItems: "center",
         justifyContent: "center",
     },
+
     buttonContainer: {
-        backgroundColor: '#ffffff',
-        alignSelf: 'flex-end',
+        position: "absolute",
+        flex: 1,
+        bottom: "10%",
+        padding: 10,
+        zIndex: 2,
+        backgroundColor: "#fff",
+        borderRadius: 20,
+    },
+    buttonText: {
+        fontSize: 14,
+        fontWeight: 'bold'
     },
     preview: {
         alignSelf: 'stretch',
