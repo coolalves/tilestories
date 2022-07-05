@@ -6,6 +6,7 @@ import * as Location from "expo-location";
 import { useState, useEffect } from "react";
 import { mapStyle } from "./mapStyle.js";
 import { MaterialIcons } from '@expo/vector-icons';
+import { getDistance, getPreciseDistance } from 'geolib';
 
 //import { CameraButton } from '../../components/CameraButton';
 
@@ -114,7 +115,7 @@ export default function Map({ navigation: { navigate } }) {
                         latitude: 40.64422,
                         longitude: -8.64071,
                     }}
-                    title="Azulejos da Antiga Estação"
+                    title="Old Train Station Facade"
                     description="test description"
                     image={require("../../../assets/imgs/tileicon.png")}
                 >
@@ -124,6 +125,33 @@ export default function Map({ navigation: { navigate } }) {
                         <View >
                             <View style={callouts.bubble}>
                                 <Text style={callouts.title}>Old train station</Text>
+                                {/* <Text>A short description</Text> */}
+                                <Image
+                                    style={callouts.image}
+                                    source={require('../../../assets/imgs/places/station.jpg')}
+                                />
+                            </View>
+                            <View style={callouts.arrowBorder} />
+                            <View style={callouts.arrow} />
+                        </View>
+                    </Callout>
+                </Marker>
+
+                <Marker
+                    coordinate={{
+                        latitude: 40.64114,
+                        longitude: -8.65403,
+                    }}
+                    title="Central Channel Mural"
+                    description="test description"
+                    image={require("../../../assets/imgs/newtileicon.png")}
+                >
+                    <Callout tooltip onPress={() =>
+                        tileDetail()
+                    }>
+                        <View >
+                            <View style={callouts.bubble}>
+                                <Text style={callouts.title}>Central channel mural</Text>
                                 {/* <Text>A short description</Text> */}
                                 <Image
                                     style={callouts.image}
