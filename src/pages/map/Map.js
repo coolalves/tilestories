@@ -21,6 +21,10 @@ export default function Map({ navigation: { navigate } }) {
     });
     const [errorMsg, setErrorMsg] = useState(null);
     const [tileName, setTileName] = useState("");
+    const [tileLocation, setTileLocation] = useState({
+        latitude: 40.64114,
+        longitude: -8.65403,
+    });
 
     useEffect(() => {
         (async () => {
@@ -69,6 +73,18 @@ export default function Map({ navigation: { navigate } }) {
     } //vai buscar a ultima localização conhecida do utilizador para passar via props para o componente da camara e posteriormente abre a camera
 
     //console.log(location)
+
+    const tileDistance = async () => {
+        let location = await Location.getLastKnownPositionAsync();
+        setLocation(location);
+        let distance = getPreciseDistance(
+            { latitude: location.coords.latitude, longitude: location.coords.longitude },
+            { latitude: tileLocation.latitude, longitude: tileLocation.longitude }
+        );
+
+        let distanceInKM = (distance / 1000 + "km")
+        console.log(distanceInKM)
+    }
 
     const userLocationParam = {
         latitude: 40.64422,
@@ -147,7 +163,7 @@ export default function Map({ navigation: { navigate } }) {
                     image={require("../../../assets/imgs/newtileicon.png")}
                 >
                     <Callout tooltip onPress={() =>
-                        tileDetail()
+                        tileDistance()
                     }>
                         <View >
                             <View style={callouts.bubble}>
