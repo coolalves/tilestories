@@ -8,7 +8,7 @@ import { shareAsync } from "expo-sharing";
 import Pressable from "react-native/Libraries/Components/Pressable/Pressable";
 
 export default function CameraScreen(location) {
-    //console.log(location);
+    console.log(location);
     let cameraRef = useRef();
     const [hasCameraPermission, setHasCameraPermission] = useState();
     const [hasMediaLibraryPermission, setHasMediaLibraryPermission] = useState();

@@ -6,6 +6,7 @@ import Profile from "./pages/profile/Profile";
 import Scoreboard from "./pages/scoreboard/Scoreboard";
 import HomeButton from "./components/HomeButton";
 import CameraScreen from "./pages/map/CameraScreen";
+import TileDetails from "./pages/tiles/TileDetails";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useFonts } from 'expo-font';
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -19,6 +20,7 @@ const StackNavigator = () => {
             <Stack.Navigator initialRouteName="Map">
                 <Stack.Screen name="Map" component={Map} options={{headerShown:false}}/>
                 <Stack.Screen name="Camera" component={CameraScreen} options={{headerShown:false}}/>
+                <Stack.Screen name="Tile" component={TileDetails} options={{headerShown:false}}/>
             </Stack.Navigator>
         </GestureHandlerRootView>
     );

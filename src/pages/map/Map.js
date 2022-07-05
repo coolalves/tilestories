@@ -8,142 +8,136 @@ import { mapStyle } from "./mapStyle.js";
 import { MaterialIcons } from '@expo/vector-icons';
 
 //import { CameraButton } from '../../components/CameraButton';
-import { createStackNavigator } from '@react-navigation/stack';
-
-
-
 
 export default function Map({ navigation: { navigate } }) {
+
+    const mapRef = React.createRef();
+    const [location, setLocation] = useState({
+        latitude: 40.64422,
+        longitude: -8.64071,
+        latitudeDelta: 0.001,
+        longitudeDelta: 0.001,
+    });
+    const [errorMsg, setErrorMsg] = useState(null);
+    const [tileName, setTileName] = useState("");
+
+    useEffect(() => {
+        (async () => {
+            let { status } = await Location.requestForegroundPermissionsAsync();
+            if (status !== 'granted') {
+                setErrorMsg('Permission to access location was denied');
+                return;
+            }
+            let location = await Location.getCurrentPositionAsync({
+                accuracy: Location.Accuracy.Balanced,
+                enableHighAccuracy: true,
+                timeInterval: 5
+            });
+            setLocation(location);
+        })();
+    }, []);
 
     const CameraButton = () => {
         return (
             <Pressable
                 onPress={() =>
                     passLocationToCamera()
-    }
-    style = { buttonstyles.buttonContainer }
-        >
-        <MaterialIcons name="add-a-photo" size={28} color="grey" />
-
+                }
+                style={buttonstyles.buttonContainer}
+            >
+                <MaterialIcons name="add-a-photo" size={28} color="grey" />
             </Pressable >
         );
-};
+    };
 
-const mapRef = React.createRef();
-const [location, setLocation] = useState({
-    latitude: 40.64422,
-    longitude: -8.64071,
-    latitudeDelta: 0.001,
-    longitudeDelta: 0.001,
-});
-const [errorMsg, setErrorMsg] = useState(null);
-
-useEffect(() => {
-    (async () => {
+    const passLocationToCamera = async () => {
         let { status } = await Location.requestForegroundPermissionsAsync();
-        if (status !== 'granted') {
-            setErrorMsg('Permission to access location was denied');
-            return;
+        try {
+            if (status !== 'granted') {
+                setErrorMsg('Permission to access location was denied');
+                return;
+            } else {
+                let location = await Location.getLastKnownPositionAsync();
+                setLocation(location);
+            }
+        } catch (error) {
+            console.log(error);
         }
+        //console.log(location);
+        navigate('Camera', { location });
+    } //vai buscar a ultima localização conhecida do utilizador para passar via props para o componente da camara e posteriormente abre a camera
 
-        let location = await Location.getCurrentPositionAsync({
-            accuracy: Location.Accuracy.Balanced,
-            enableHighAccuracy: true,
-            timeInterval: 5
-        });
-        setLocation(location);
-    })();
-}, []);
+    //console.log(location)
 
-const passLocationToCamera = async () => {
-    let { status } = await Location.requestForegroundPermissionsAsync();
-    try {
-        if (status !== 'granted') {
-            setErrorMsg('Permission to access location was denied');
-            return;
-        } else {
-            let location = await Location.getLastKnownPositionAsync();
-            setLocation(location);
-        }
-    } catch (error) {
-        console.log(error);
+    const userLocationParam = {
+        latitude: 40.64422,
+        longitude: -8.64071,
+        latitudeDelta: 0.001,
+        longitudeDelta: 0.001,
     }
-    //console.log(location);
-    navigate('Camera', { location });
-} //vai buscar a ultima localização conhecida do utilizador para passar via props para o componente da camara e posteriormente abre a camera
 
-//console.log(location)
+    const goToCurrentPosition = () => {
+        mapRef.current.animateToRegion(userLocationParam, 2000);
+        //<Button onPress={goToCurrentPosition} title="current position" /> botao de ir para localizaçao
+    };
 
-const userLocationParam = {
-    latitude: 40.64422,
-    longitude: -8.64071,
-    latitudeDelta: 0.001,
-    longitudeDelta: 0.001,
-}
+    const tileDetail = () => {
+        setTileName("Old train station");
+        navigate('Tile', { tileName });
+    };
 
+    //let userLatitude = userLocation.coords.latitude;
+    //let userLongitude = userLocation.coords.longitude;
+    //console.log(userLatitude + userLongitude + "deu")
 
-
-const goToCurrentPosition = () => {
-    mapRef.current.animateToRegion(userLocationParam, 2000);
-    //<Button onPress={goToCurrentPosition} title="current position" /> botao de ir para localizaçao
-};
-
-//let userLatitude = userLocation.coords.latitude;
-//let userLongitude = userLocation.coords.longitude;
-//console.log(userLatitude + userLongitude + "deu")
-
-return (
-
-
-    <View style={styles.container}>
-        <CameraButton />
-
-        <MapView
-            ref={mapRef}
-            style={styles.map}
-            customMapStyle={mapStyle}
-            initialRegion={{
-                latitude: 40.64422,
-                longitude: -8.64071,
-                latitudeDelta: 0.001,
-                longitudeDelta: 0.001,
-            }}
-            showsUserLocation={true}
-            followsUserLocation={true}
-            showsMyLocationButton={true}
-            showsBuildings={true}
-            showsIndoorLevelPicker={true}
-        >
-            <Marker
-                coordinate={{
+    return (
+        <View style={styles.container}>
+            <CameraButton />
+            <MapView
+                ref={mapRef}
+                style={styles.map}
+                customMapStyle={mapStyle}
+                initialRegion={{
                     latitude: 40.64422,
                     longitude: -8.64071,
+                    latitudeDelta: 0.001,
+                    longitudeDelta: 0.001,
                 }}
-                title="Azulejos da Antiga Estação"
-                description="test description"
-                image={require("../../../assets/imgs/tileicon.png")}
+                showsUserLocation={true}
+                followsUserLocation={true}
+                showsMyLocationButton={true}
+                showsBuildings={true}
+                showsIndoorLevelPicker={true}
             >
-                <Callout tooltip>
-                    <View>
-                        <View style={callouts.bubble}>
-                            <Text style={callouts.title}>Old train station facade</Text>
-                            {/* <Text>A short description</Text> */}
-                            <Image
-                                style={callouts.image}
-                                source={require('../../../assets/imgs/places/station.jpg')}
-                            />
+                <Marker
+                    coordinate={{
+                        latitude: 40.64422,
+                        longitude: -8.64071,
+                    }}
+                    title="Azulejos da Antiga Estação"
+                    description="test description"
+                    image={require("../../../assets/imgs/tileicon.png")}
+                >
+                    <Callout tooltip onPress={() =>
+                        tileDetail()
+                    }>
+                        <View >
+                            <View style={callouts.bubble}>
+                                <Text style={callouts.title}>Old train station</Text>
+                                {/* <Text>A short description</Text> */}
+                                <Image
+                                    style={callouts.image}
+                                    source={require('../../../assets/imgs/places/station.jpg')}
+                                />
+                            </View>
+                            <View style={callouts.arrowBorder} />
+                            <View style={callouts.arrow} />
                         </View>
-                        <View style={callouts.arrowBorder} />
-                        <View style={callouts.arrow} />
-                    </View>
-                </Callout>
-            </Marker>
-        </MapView>
-    </View>
-
-
-
-);
+                    </Callout>
+                </Marker>
+            </MapView>
+        </View>
+    );
 }
 
 const styles = StyleSheet.create({
