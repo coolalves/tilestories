@@ -1,15 +1,16 @@
 import React from "react";
-import { Text, View, StyleSheet, Image, TouchableOpacity} from 'react-native';
+import { Text, View, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { ScrollView } from "react-native-gesture-handler";
 
 
-export default function TileDetails(tileName) {
+export default function TileDetails(props) {
+    console.log(props.route.params.title);
     return (
         <View style={styles.container}>
             <ScrollView>
                 <View style={{ alignItems: 'center', marginHorizontal: 30 }}>
                     <Image style={styles.tileImg} source={require('../../../assets/imgs/places/station.jpg')} />
-                    <Text style={styles.tileName}>Old train station</Text>
+                    <Text style={styles.tileName}>{props.route.params.title}</Text>
                     <Text style={styles.tileCaption}>Lorem Ipsum</Text>
                     <Text style={styles.tileDescription}>Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum</Text>
                     <View style={styles.separator}></View>

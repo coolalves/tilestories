@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 import { mapStyle } from "./mapStyle.js";
 import { MaterialIcons } from '@expo/vector-icons';
 import { getDistance, getPreciseDistance } from 'geolib';
+import CustomMarker from "../../components/CustomMarker.js";
 
 //import { CameraButton } from '../../components/CameraButton';
 
@@ -26,6 +27,19 @@ export default function Map({ navigation: { navigate } }) {
         longitude: -8.65403,
     });
 
+    const getUserLocation = async () =>{
+        let { status } = await Location.requestForegroundPermissionsAsync();
+            if (status !== 'granted') {
+                setErrorMsg('Permission to access location was denied');
+                return;
+            }
+            let location = await Location.getCurrentPositionAsync({
+                accuracy: Location.Accuracy.Balanced,
+                enableHighAccuracy: true,
+                timeInterval: 5
+            });
+    }
+
     useEffect(() => {
         (async () => {
             let { status } = await Location.requestForegroundPermissionsAsync();
@@ -41,6 +55,7 @@ export default function Map({ navigation: { navigate } }) {
             setLocation(location);
         })();
     }, []);
+ 
 
     const CameraButton = () => {
         return (
@@ -74,12 +89,12 @@ export default function Map({ navigation: { navigate } }) {
 
     //console.log(location)
 
-    const tileDistance = async () => {
+    const tileDistance = async (coordinates) => {
         let location = await Location.getLastKnownPositionAsync();
         setLocation(location);
         let distance = getPreciseDistance(
             { latitude: location.coords.latitude, longitude: location.coords.longitude },
-            { latitude: tileLocation.latitude, longitude: tileLocation.longitude }
+            { latitude: coordinates.latitude, longitude: coordinates.longitude }
         );
 
         let distanceInKM = (distance / 1000 + "km")
@@ -98,15 +113,16 @@ export default function Map({ navigation: { navigate } }) {
         //<Button onPress={goToCurrentPosition} title="current position" /> botao de ir para localizaçao
     };
 
-    const tileDetail = () => {
+    const tileDetail = (title) => {
         setTileName("Old train station");
-        navigate('Tile', { tileName });
+        navigate('Tile', { title });
     };
 
     //let userLatitude = userLocation.coords.latitude;
     //let userLongitude = userLocation.coords.longitude;
     //console.log(userLatitude + userLongitude + "deu")
-
+    let markerTitle = "Old train station";
+    
     return (
         <View style={styles.container}>
             <CameraButton />
@@ -131,12 +147,13 @@ export default function Map({ navigation: { navigate } }) {
                         latitude: 40.64422,
                         longitude: -8.64071,
                     }}
-                    title="Old Train Station Facade"
+                    title={markerTitle}
                     description="test description"
                     image={require("../../../assets/imgs/tileicon.png")}
                 >
-                    <Callout tooltip onPress={() =>
-                        tileDetail()
+                    <Callout tooltip onPress={(e) =>
+                        tileDetail(markerTitle)
+                        
                     }>
                         <View >
                             <View style={callouts.bubble}>
@@ -153,32 +170,7 @@ export default function Map({ navigation: { navigate } }) {
                     </Callout>
                 </Marker>
 
-                <Marker
-                    coordinate={{
-                        latitude: 40.64114,
-                        longitude: -8.65403,
-                    }}
-                    title="Central Channel Mural"
-                    description="test description"
-                    image={require("../../../assets/imgs/newtileicon.png")}
-                >
-                    <Callout tooltip onPress={() =>
-                        tileDistance()
-                    }>
-                        <View >
-                            <View style={callouts.bubble}>
-                                <Text style={callouts.title}>Central channel mural</Text>
-                                {/* <Text>A short description</Text> */}
-                                <Image
-                                    style={callouts.image}
-                                    source={require('../../../assets/imgs/places/station.jpg')}
-                                />
-                            </View>
-                            <View style={callouts.arrowBorder} />
-                            <View style={callouts.arrow} />
-                        </View>
-                    </Callout>
-                </Marker>
+                <CustomMarker tileDistance={tileDistance} coords={{latitude: 40.64114, longitude: -8.65403}} />
             </MapView>
         </View>
     );
