@@ -1,6 +1,6 @@
 import * as React from "react";
 import MapView from "react-native-maps";
-import { StyleSheet, Text, View, Dimensions, Pressable, Image } from "react-native";
+import { StyleSheet, Text, View, Dimensions, Pressable, Image, Alert } from "react-native";
 import { Marker, Callout } from "react-native-maps";
 import * as Location from "expo-location";
 import { useState, useEffect } from "react";
@@ -26,19 +26,20 @@ export default function Map({ navigation: { navigate } }) {
         latitude: 40.64114,
         longitude: -8.65403,
     });
+    const [distanceToTile, setDistanceToTile] = useState(null)
 
-    const getUserLocation = async () =>{
-        let { status } = await Location.requestForegroundPermissionsAsync();
-            if (status !== 'granted') {
-                setErrorMsg('Permission to access location was denied');
-                return;
-            }
-            let location = await Location.getCurrentPositionAsync({
-                accuracy: Location.Accuracy.Balanced,
-                enableHighAccuracy: true,
-                timeInterval: 5
-            });
-    }
+    /* const getUserLocation = async () =>{
+         let { status } = await Location.requestForegroundPermissionsAsync();
+             if (status !== 'granted') {
+                 setErrorMsg('Permission to access location was denied');
+                 return;
+             }
+             let location = await Location.getCurrentPositionAsync({
+                 accuracy: Location.Accuracy.Balanced,
+                 enableHighAccuracy: true,
+                 timeInterval: 5
+             });
+     } */
 
     useEffect(() => {
         (async () => {
@@ -55,20 +56,35 @@ export default function Map({ navigation: { navigate } }) {
             setLocation(location);
         })();
     }, []);
- 
+
 
     const CameraButton = () => {
-        return (
-            <Pressable
+        if (distanceToTile > 50 || distanceToTile == null) {
+            return (<Pressable
                 onPress={() =>
-                    passLocationToCamera()
+                    farFromTile() //o utilizador está a mais de 50m do azulejo por isso não pode tentar fotografar
                 }
                 style={buttonstyles.buttonContainer}
             >
-                <MaterialIcons name="add-a-photo" size={28} color="grey" />
+                <MaterialIcons name="add-a-photo" size={28} color="#d1d1d1" />
             </Pressable >
-        );
+            )
+        } else return (<Pressable
+            onPress={() =>
+                passLocationToCamera()
+            }
+            style={buttonstyles.buttonContainer}
+        >
+            <MaterialIcons name="add-a-photo" size={28} color="grey" />
+        </Pressable >)
+
     };
+
+    const farFromTile = () => {
+        Alert.alert("You're too far", "Get closer to the tile so you can take a picture of it!", [
+            { text: "Got it!", /*onPress: () => console.log("got it!") */}
+        ])
+    }
 
     const passLocationToCamera = async () => {
         let { status } = await Location.requestForegroundPermissionsAsync();
@@ -97,8 +113,10 @@ export default function Map({ navigation: { navigate } }) {
             { latitude: coordinates.latitude, longitude: coordinates.longitude }
         );
 
-        let distanceInKM = (distance / 1000 + "km")
-        console.log(distanceInKM)
+        // let distanceInKM = (distance / 1000 + "km")
+        console.log(distance)
+        setDistanceToTile(distance)
+
     }
 
     const userLocationParam = {
@@ -122,7 +140,7 @@ export default function Map({ navigation: { navigate } }) {
     //let userLongitude = userLocation.coords.longitude;
     //console.log(userLatitude + userLongitude + "deu")
     let markerTitle = "Old train station";
-    
+
     return (
         <View style={styles.container}>
             <CameraButton />
@@ -153,7 +171,7 @@ export default function Map({ navigation: { navigate } }) {
                 >
                     <Callout tooltip onPress={(e) =>
                         tileDetail(markerTitle)
-                        
+
                     }>
                         <View >
                             <View style={callouts.bubble}>
@@ -170,7 +188,7 @@ export default function Map({ navigation: { navigate } }) {
                     </Callout>
                 </Marker>
 
-                <CustomMarker tileDistance={tileDistance} coords={{latitude: 40.64114, longitude: -8.65403}} />
+                <CustomMarker tileDistance={tileDistance} coords={{ latitude: 40.64114, longitude: -8.65403 }} />
             </MapView>
         </View>
     );
