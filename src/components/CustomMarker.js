@@ -12,11 +12,11 @@ const CustomMarker = (props) => {
     return (
         <Marker
             coordinate={props.coords}
-            title="Central Channel Mural"
+            title="Unknown Tile"
             description="test description"
             image={require("../../assets/imgs/newtileicon.png")}
         >
-            <Callout   onPress={() =>
+            <Callout onPress={() =>
                 props.tileDistance(props.coords)
             }>
                 <Text >Unknown Tile</Text>

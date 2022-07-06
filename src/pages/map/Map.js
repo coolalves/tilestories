@@ -82,7 +82,7 @@ export default function Map({ navigation: { navigate } }) {
 
     const farFromTile = () => {
         Alert.alert("You're too far", "Get closer to the tile so you can take a picture of it!", [
-            { text: "Got it!", /*onPress: () => console.log("got it!") */}
+            { text: "Got it!", /*onPress: () => console.log("got it!") */ }
         ])
     }
 
@@ -189,11 +189,13 @@ export default function Map({ navigation: { navigate } }) {
                 </Marker>
 
                 <CustomMarker tileDistance={tileDistance} coords={{ latitude: 40.64114, longitude: -8.65403 }} />
+                <CustomMarker tileDistance={tileDistance} coords={{ latitude: 40.63843, longitude: -8.65129 }} />
             </MapView>
         </View>
     );
 }
-
+/* <CustomMarker tileDistance={tileDistance} coords={{ latitude: 40.64082, longitude: -8.65375 }} */ //este ta fora por ser demasiado proximo de um deles (faz confusão), mas eventualmente será reposto
+//ESCLARECER QUESTÃO DOS AZULEJOS NAO DESCOBERTOS AMANHÃ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 const styles = StyleSheet.create({
     container: {
         flex: 1,
