@@ -12,6 +12,7 @@ import {getFirestore} from "firebase/firestore";
 
 const Login =()=>{
 
+    const [username, setUsername]= React.useState('');
     const [email, setEmail]= React.useState('');
     const [password, setPassword]= React.useState('');
     var user;
@@ -31,7 +32,7 @@ const Login =()=>{
                 // Your Document Goes Here
                 const docData = {
                     "email": user.email ,
-                    "name": "nomealia",
+                    "name": username,
                     "uid": user.uid,
                     "resgisterDate": user.metadata.creationTime
                 }
@@ -65,22 +66,6 @@ const Login =()=>{
 
     }
 
-    const handleSignIn = () => {
-        signInWithEmailAndPassword(auth, email, password)
-            .then((userCredential)=>{
-                console.log('Signed In!');
-                const user = userCredential.user;
-                console.log(user);
-
-            })
-            .catch(error => {
-                console.log(error);
-            })
-    }
-
-
-
-
     return (
         <KeyboardAvoidingView
         style={styles.container}
@@ -97,6 +82,12 @@ const Login =()=>{
             </View>
             <View style={styles.inputContainer}>
                 <TextInput
+                    placeholder="username"
+                    autoCorrect={false}
+                    onChangeText={(text)=>setUsername(text)}
+                    style={styles.input}
+                />
+                <TextInput
                     placeholder="Email"
                     autoCorrect={false}
                     onChangeText={(text)=>setEmail(text)}
@@ -112,16 +103,10 @@ const Login =()=>{
             </View>
         <View style={styles.buttonContainer}>
                 <TouchableOpacity
-                    onPress={handleSignIn}
+                    onPress={handleCreateAccount}
                     style={[styles.buttonText,styles.buttonOutlinelog]}
                 >
-                    <Text style={styles.textbranco}>Login</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                    onPress={handleCreateAccount}
-                    style={[styles.button, styles.buttonOutline]}>
-                    <Text>Register</Text>
+                    <Text style={styles.textbranco}>Register</Text>
                 </TouchableOpacity>
         </View>
 

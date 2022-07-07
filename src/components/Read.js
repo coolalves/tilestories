@@ -4,6 +4,8 @@ import firebaseConfig from "../firebase-config";
 import {doc, setDoc, getDoc} from "firebase/firestore";
 import { Button, Text, View } from 'react-native';
 import { useState } from 'react';
+import {initializeFirestore} from 'firebase/firestore';
+
 
 const app=initializeApp(firebaseConfig);
 const db= getFirestore(app);
@@ -39,8 +41,8 @@ const Read = () => {
             <Button title='Read Doc' onPress={doIT}></Button>
             {
                 userDoc != null &&
-                <Text>Descrição: {userDoc.description} <br></br>
-                    Dificultdade: {userDoc.difficulty}
+                <Text>Descrição: {userDoc.description}
+
 
                 </Text>
 
