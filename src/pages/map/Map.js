@@ -42,7 +42,7 @@ export default function Map({ navigation: { navigate } }) {
 
     const myDoc = doc(db, "azulejo", "uid")
 
-    function pullinfo(){
+    function pullinfo() {
         getDoc(myDoc)
             // Handling Promises
             .then((snapshot) => {
@@ -94,7 +94,7 @@ export default function Map({ navigation: { navigate } }) {
                 timeInterval: 5
             });
             setLocation(location);
-
+            await pullinfo();
         })();
     }, []);
 
