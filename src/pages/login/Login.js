@@ -85,7 +85,7 @@ const Login = () => {
             style={styles.container}
         >
 
-             
+
             <View style={styles.inputContainer}>
                 <TextInput
                     placeholder="Email"

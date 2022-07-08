@@ -1,77 +1,196 @@
 import React from 'react';
-import { View, Text, Image, Touchable, StyleSheet, Dimensions } from 'react-native';
-import Pressable from 'react-native/Libraries/Components/Pressable/Pressable';
+import { View, Text, KeyboardAvoidingView, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { initializeApp } from "firebase/app";
+import firebaseConfig from "../../../firebase-config";
+import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
+import { getFirestore } from "firebase/firestore";
+import { AuthContext } from '../../context';
 
 const Landing = () => {
+
+    const [email, setEmail]= React.useState('');
+    const [password, setPassword]= React.useState('');
+    var user;
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db= getFirestore(app);
+
+    const handleCreateAccount = () => {
+        createUserWithEmailAndPassword(auth, email, password)
+            .then((userCredential)=>{
+                console.log('Account Createddd!!');
+                user = userCredential.user;
+
+                const myDoc = doc(db, "users", user.uid)
+
+                // Your Document Goes Here
+                const docData = {
+                    "email": user.email ,
+                    "name": "nomealia",
+                    "uid": user.uid,
+                    "resgisterDate": user.metadata.creationTime
+                }
+
+                setDoc(myDoc, docData)
+                    // Handling Promises
+                    .then(() => {
+                        // MARK: Success
+                        console.log('vai para o firebase!!');
+                    })
+                    .catch((error) => {
+                        // MARK: Failure
+                        alert(error.message)
+                    })
+
+
+            })
+            .catch(error => {
+                console.log(error);
+            })
+
+        //passar para a base de dados
+
+
+
+        // MARK: Creating New Doc in Firebase
+        // Before that enable Firebase in Firebase Console
+
+
+
+
+    }
+
+    const handleSignIn = () => {
+        signInWithEmailAndPassword(auth, email, password)
+            .then((userCredential)=>{
+                console.log('Signed In!');
+                const user = userCredential.user;
+                console.log(user);
+
+            })
+            .catch(error => {
+                console.log(error);
+            })
+    }
+
+
+
+
     return (
-        <View style={styles.container}>
-            <View style={styles.logoContainer}>
+        <KeyboardAvoidingView
+            style={styles.container}
+        >
+
+            <View>
                 <Image
-                    source={require("../../../assets/fullLogoLight.png")}
-                    style={styles.logoStyle}
-                />
+                    source={require('../../../assets/logo.png')}
+                    style={styles.fotinha}
+
+                ></Image>
             </View>
-            <View style={styles.optionsContainer}>
+            <View style={styles.buttonContainer}>
+                <TouchableOpacity
+                    onPress={handleSignIn}
+                    style={[styles.buttonText,styles.buttonOutlinelog]}
+                >
+                    <Text style={styles.textbranco}>Login</Text>
+                </TouchableOpacity>
 
-                <Pressable style={styles.signupPressable}>
-                    <Text style={styles.pressableText}>
-                        New user
-                    </Text>
-                </Pressable>
-
-                <Pressable style={styles.loginPressable}>
-                    <Text style={styles.pressableText}>
-                        Returning user
-                    </Text>
-                </Pressable>
-
-
+                <TouchableOpacity
+                    onPress={handleCreateAccount}
+                    style={[styles.button, styles.buttonOutline]}>
+                    <Text>Register</Text>
+                </TouchableOpacity>
             </View>
-        </View>
+
+
+
+
+        </KeyboardAvoidingView>
+
     )
 }
 
 const styles = StyleSheet.create({
     container: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        flex:3
+    },
+    inputContainer:{
+        width: '80%'
+    },
+    input:{
+        backgroundColor:'white',
+        paddingHorizontal: 15,
+        paddingVertical: 10,
+        marginTop: 5,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+        borderRadius:10,
+        marginVertical:10,
+
+    },
+
+    buttonContainer:{
+        width: '50%',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#FFFBFA',
-        width: Dimensions.get("window").width,
-        height: Dimensions.get("window").height + 100,
+        marginTop: 40,
 
     },
 
-    logoContainer: {
-        width: 200,
-        height: 200,
-        display: "flex",
-         
+    button:{
+        backgroundColor:'#0782F9',
+        width:'100%',
+        padding:15,
+        borderRadius:10,
+        alignItems:"center",
     },
-    logoStyle:{
-        width: "100%",
-        height:"100%"
-    },
-
-    optionsContainer: {
-
-    },
-
-    loginPressable: {
-        backgroundColor: "red"
+    buttonOutline:{
+        backgroundColor: 'white',
+        marginTop: 5,
+        borderColor: '#5C75DD',
+        borderWidth:2,
     },
 
-    signupPressable: {
+    buttonOutlinelog:{
+        backgroundColor: '#5C75DD',
+        marginTop: 5,
+        marginBottom: 8,
+        borderColor: '#5C75DD',
+        borderWidth:2,
 
     },
+    buttonText:{
+        backgroundColor:'#5C75DD',
+        width:'100%',
+        padding:15,
+        borderRadius:10,
+        alignItems:"center",
+    },
+    buttonOutlineText:{
+        color:'#0782F9',
+        fontWeight: '700',
+        fontSize:16,
+    },
+    fotinha:{
+        marginBottom:80,
+    },
+    textbranco:{
+        color:'white',
+        fontWeight: '500'
+    },
 
-    pressableText: {
-        textAlign: "center",
-        fontSize: 16,
-        fontWeight: "bold",
 
-    }
-
-
-})
+});
 
 export default Landing;
