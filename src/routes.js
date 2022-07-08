@@ -11,27 +11,13 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useFonts } from 'expo-font';
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import MapModal from "./components/MapModal"
-import NewAcc from "./pages/login/Newacc"
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
-const log = false;
-const account = NewAcc;
-if(log!=false){
-    account = Profile;
-}
 
 const StackNavigator = () => {
-    if (log == false) {
+    
         return (
-            <GestureHandlerRootView style={{ flex: 1 }}>
-                <Stack.Navigator initialRouteName="Account">
-                    <Stack.Screen name="Account" component={account} options={{ headerShown: false }} />
-                </Stack.Navigator>
-            </GestureHandlerRootView>
-        );
-    } else {
-        return(
             <GestureHandlerRootView style={{ flex: 1 }}>
                 <Stack.Navigator initialRouteName="Map">
                     <Stack.Screen name="Map" component={Map} options={{ headerShown: false }} />
@@ -39,8 +25,7 @@ const StackNavigator = () => {
                     <Stack.Screen name="Tile" component={TileDetails} options={{ headerShown: false }} />
                 </Stack.Navigator>
             </GestureHandlerRootView>
-        )
-    }
+        );
 
 };
 
@@ -94,7 +79,7 @@ export default function Routes() {
                     )
                 }}
             />
-            <Tab.Screen name="Account" component={StackNavigator}
+            <Tab.Screen name="Account" component={MapModal}
                 options={{
                     tabBarLabel: '',
                     tabBarIcon: ({ size, color }) => (
