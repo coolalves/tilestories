@@ -1,18 +1,41 @@
 import * as React from "react";
-import { StyleSheet, Text, View, SafeAreaView, Button, Image } from "react-native";
+import {StyleSheet, Text, View, SafeAreaView, Button, Image, useWindowDimensions, Dimensions} from "react-native";
 import { useState, useEffect, useRef } from "react";
 import { Camera } from "expo-camera";
 import * as MediaLibrary from 'expo-media-library'
 import { StatusBar } from "expo-status-bar";
 import { shareAsync } from "expo-sharing";
 import Pressable from "react-native/Libraries/Components/Pressable/Pressable";
+import { getStorage, ref, uploadBytes, } from 'firebase/storage';
+import {doc, setDoc, getDoc, updateDoc} from "firebase/firestore";
+import {getFirestore} from "firebase/firestore";
+import {initializeApp} from "firebase/app";
+
+
+
+
+const firebaseConfig = {
+    apiKey: "AIzaSyAeTmpYBFU9qhsqX0mIU_gg9lKBKJ9TBu0",
+    authDomain: "tilestories-64fbb.firebaseapp.com",
+    projectId: "tilestories-64fbb",
+    storageBucket: "tilestories-64fbb.appspot.com",
+    messagingSenderId: "905474695050",
+    appId: "1:905474695050:web:bab623a9e3c2a84bfd7273",
+    measurementId: "G-3K5HHWFT9Z"
+};
+
+
+const app=initializeApp(firebaseConfig);
+const db= getFirestore(app);
+const storage = getStorage(app);
 
 export default function CameraScreen(location) {
     console.log(location);
     let cameraRef = useRef();
     const [hasCameraPermission, setHasCameraPermission] = useState();
     const [hasMediaLibraryPermission, setHasMediaLibraryPermission] = useState();
-    const [photo, setPhoto] = useState();
+    const [photo, setPhoto] = useState()
+
 
     useEffect(() => {
         (async () => {
@@ -32,9 +55,9 @@ export default function CameraScreen(location) {
 
     let takePhoto = async () => {
         let options = {
-            quality: 1,
+            quality: 0.1,
             base64: true,
-            exif: true
+
         };
 
         let newPhoto = await cameraRef.current.takePictureAsync(options);
@@ -42,13 +65,23 @@ export default function CameraScreen(location) {
     };
 
     if (photo) {
-        let sharePhoto = () => {
-            shareAsync(photo.uri).then(() => {
-                setPhoto(undefined);
-            });
-        };
+        let sharePhoto = async () => {
+
+            const storage = getStorage(); //the storage itself
+            const refi = ref(storage, 'monalisa/image3.jpg'); //how the image will be addressed inside the storage
+            //convert image to array of bytes
+            const img =  await fetch(photo.uri);
+            console.log("img3");
+
+            const bytes = await img.blob();
+
+             uploadBytes(refi, bytes); //upload images
+
+        }
+
 
         let savePhoto = () => {
+
             MediaLibrary.saveToLibraryAsync(photo.uri).then(() => {
                 setPhoto(undefined);
             });
@@ -56,7 +89,7 @@ export default function CameraScreen(location) {
 
         return (
             <SafeAreaView style={styles.cameraContainer}>
-                <Image style={styles.preview} source={{ uri: "data:image/jpg;base64," + photo.base64 }} />
+                <Image style={[styles.preview, styles.photoo]} source={{ uri: "data:image/jpg;base64," + photo.base64 }} />
                 <Pressable style={styles.buttonContainer} onPress={sharePhoto} >
                     <Text> Share</Text>
                 </ Pressable>
@@ -67,17 +100,20 @@ export default function CameraScreen(location) {
     }
 
     return (
-        <Camera style={styles.cameraContainer} ref={cameraRef}>
-            <Pressable style={styles.buttonContainer} onPress={takePhoto}>
-                <Text style={styles.buttonText}> Take Photo</Text>
-            </Pressable>
-            <StatusBar style="auto" />
-        </Camera>
+            <Camera style={[styles.cameraContainer]} ref={cameraRef}>
+
+                <Pressable style={styles.buttonContainer} onPress={takePhoto}>
+                    <Text style={styles.buttonText}> Take Photo</Text>
+                </Pressable>
+                <StatusBar style="auto" />
+            </Camera>
+
     );
 }
 
 const styles = StyleSheet.create({
     cameraContainer: {
+        backgroundColor: "#151F6D",
         flex: 1,
         alignItems: "center",
         justifyContent: "center",
@@ -97,7 +133,13 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
     },
     preview: {
-        alignSelf: 'stretch',
+        backgroundColor: "#151F6D",
+        alignSelf:'stretch',
         flex: 1
+    },
+    photoo:{
+        width: Dimensions.get("window").width,
+        height: Dimensions.get("window").height - 50,
+        top: 40
     }
 });

@@ -56,11 +56,19 @@ const AuthStackNavigator = () => {
 const MapStackNavigator = () => {
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
+<<<<<<< Updated upstream
             <MapStack.Navigator initialRouteName="Map">
                 <MapStack.Screen name="Map" component={Map} options={{ headerShown: false }} />
                 <MapStack.Screen name="Camera" component={CameraScreen} options={{ headerShown: false }} />
                 <MapStack.Screen name="Tile" component={TileDetails} options={{ headerShown: false }} />
             </MapStack.Navigator>
+=======
+            <Stack.Navigator initialRouteName="Map">
+                <Stack.Screen name="Map" component={Map} options={{ headerShown: false }} />
+                <Stack.Screen name="Camera" component={Profile} options={{ headerShown: false }} />
+                <Stack.Screen name="Tile" component={TileDetails} options={{ headerShown: false }} />
+            </Stack.Navigator>
+>>>>>>> Stashed changes
         </GestureHandlerRootView>
     );
 };
@@ -71,6 +79,7 @@ export default function Routes() {
       });*/
 
     return (
+<<<<<<< Updated upstream
         
             <Tab.Navigator
                 initialRouteName="Home"
@@ -97,6 +106,58 @@ export default function Routes() {
                         fontWeight: 'bold',
                         // fontFamily: 'NotoSans'
                     },
+=======
+        <Tab.Navigator
+            initialRouteName="Home"
+             
+            screenOptions={{
+                headerShown: false,
+                tabBarStyle: {
+                    backgroundColor: '#151F6D',
+                    borderTopColor: 'transparent',
+                    height: 50,
+                },
+                activeTintColor: 'white',
+                inactiveTintColor: 'grey',
+                tabStyle: {
+                    paddingBottom: 5,
+                    paddingTop: 5,
+                },
+                title: "tilestories",
+                headerStyle: {
+                    backgroundColor: '#151F6D',
+                    borderEndColor: 'red',
+                },
+                headerTintColor: 'white',
+                headerTitleStyle: {
+                    fontWeight: 'bold',
+                    // fontFamily: 'NotoSans'
+                },
+            }}
+        >
+            <Tab.Screen name="Scoreboard" component={Scoreboard}
+                options={{
+                    tabBarLabel: '',
+                    tabBarIcon: ({ size, color }) => (
+                        <MaterialCommunityIcons name="medal" size={28} color="white" />
+                    )
+                }}
+            />
+            <Tab.Screen name="Home" component={StackNavigator}
+                options={{
+                    tabBarLabel: '',
+                    tabBarIcon: ({ size, color }) => (
+                        <HomeButton size={28} color={color} />
+                    )
+                }}
+            />
+            <Tab.Screen name="Account" component={CameraScreen}
+                options={{
+                    tabBarLabel: '',
+                    tabBarIcon: ({ size, color }) => (
+                        <MaterialCommunityIcons name="account" size={28} color="white" />
+                    )
+>>>>>>> Stashed changes
                 }}
             >
                 <Tab.Screen name="Scoreboard" component={Scoreboard}
