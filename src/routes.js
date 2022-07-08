@@ -16,14 +16,17 @@ import NewAcc from "./pages/login/Newacc"
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 const log = false;
+const account = NewAcc;
+if(log!=false){
+    account = Profile;
+}
 
 const StackNavigator = () => {
     if (log == false) {
         return (
             <GestureHandlerRootView style={{ flex: 1 }}>
-                <Stack.Navigator initialRouteName="Map">
-                    <Stack.Screen name="Account" component={Profile} options={{ headerShown: false }} />
-                     
+                <Stack.Navigator initialRouteName="Account">
+                    <Stack.Screen name="Account" component={account} options={{ headerShown: false }} />
                 </Stack.Navigator>
             </GestureHandlerRootView>
         );
@@ -91,7 +94,7 @@ export default function Routes() {
                     )
                 }}
             />
-            <Tab.Screen name="Account" component={MapModal}
+            <Tab.Screen name="Account" component={StackNavigator}
                 options={{
                     tabBarLabel: '',
                     tabBarIcon: ({ size, color }) => (
