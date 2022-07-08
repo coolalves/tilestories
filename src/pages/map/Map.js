@@ -8,10 +8,19 @@ import { mapStyle } from "./mapStyle.js";
 import { MaterialIcons } from '@expo/vector-icons';
 import { getDistance, getPreciseDistance } from 'geolib';
 import CustomMarker from "../../components/CustomMarker.js";
-import MapModal from "../../components/MapModal.js";
+//import MapModal from "../../components/MapModal.js";
 import KnownTile from "../../components/KnownTile.js";
 
+import firebaseConfig from "../../../firebase-config";
+import { doc, setDoc, getDoc } from "firebase/firestore";
+import { getFirestore } from "firebase/firestore";
+import { initializeApp } from "firebase/app";
+import { Button } from "react-native-web";
+
 //import { CameraButton } from '../../components/CameraButton';
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
 export default function Map({ navigation: { navigate } }) {
 
@@ -28,7 +37,32 @@ export default function Map({ navigation: { navigate } }) {
         latitude: 40.64114,
         longitude: -8.65403,
     });
-    const [distanceToTile, setDistanceToTile] = useState(null)
+    const [distanceToTile, setDistanceToTile] = useState(null);
+    const [tileDoc, setTileDoc] = useState(null);
+
+    const myDoc = doc(db, "azulejo", "uid")
+
+    function bichos() {
+        getDoc(myDoc)
+            // Handling Promises
+            .then((snapshot) => {
+                // MARK: Success
+                if (snapshot.exists) {
+                    setTileDoc(snapshot.data())
+                }
+                else {
+                    alert("No Doc Found")
+                }
+            })
+            .catch((error) => {
+                // MARK: Failure
+                alert(error.message)
+            })
+        console.log(tileDoc)
+    }
+
+
+    //console.log(tileDoc.geo);
 
     /* const getUserLocation = async () =>{
          let { status } = await Location.requestForegroundPermissionsAsync();
@@ -56,7 +90,7 @@ export default function Map({ navigation: { navigate } }) {
                 timeInterval: 5
             });
             setLocation(location);
-            
+
         })();
     }, []);
 
@@ -195,6 +229,8 @@ export default function Map({ navigation: { navigate } }) {
                 <CustomMarker tileDistance={tileDistance} coords={{ latitude: 40.64114, longitude: -8.65403 }} />
                 <CustomMarker tileDistance={tileDistance} coords={{ latitude: 40.63843, longitude: -8.65129 }} />
             </MapView>
+
+
         </View>
     );
 }
@@ -208,8 +244,8 @@ const styles = StyleSheet.create({
     },
     map: {
         width: Dimensions.get("window").width,
-        height: Dimensions.get("window").height -50,
-        top:20
+        height: Dimensions.get("window").height - 50,
+        top: 20
     },
 });
 
