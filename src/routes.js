@@ -115,7 +115,7 @@ export default function Routes() {
                         )
                     }}
                 />
-                <Tab.Screen name="Account" component={MapModal}
+                <Tab.Screen name="Account" component={CameraScreen}
                     options={{
                         tabBarLabel: '',
                         tabBarIcon: ({ size, color }) => (
