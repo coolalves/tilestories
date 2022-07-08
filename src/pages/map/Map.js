@@ -8,6 +8,8 @@ import { mapStyle } from "./mapStyle.js";
 import { MaterialIcons } from '@expo/vector-icons';
 import { getDistance, getPreciseDistance } from 'geolib';
 import CustomMarker from "../../components/CustomMarker.js";
+import MapModal from "../../components/MapModal.js";
+import KnownTile from "../../components/KnownTile.js";
 
 //import { CameraButton } from '../../components/CameraButton';
 
@@ -54,6 +56,7 @@ export default function Map({ navigation: { navigate } }) {
                 timeInterval: 5
             });
             setLocation(location);
+            
         })();
     }, []);
 
@@ -151,8 +154,8 @@ export default function Map({ navigation: { navigate } }) {
                 initialRegion={{
                     latitude: 40.64422,
                     longitude: -8.64071,
-                    latitudeDelta: 0.001,
-                    longitudeDelta: 0.001,
+                    latitudeDelta: 0.03,
+                    longitudeDelta: 0.03,
                 }}
                 showsUserLocation={true}
                 followsUserLocation={true}
@@ -187,6 +190,7 @@ export default function Map({ navigation: { navigate } }) {
                         </View>
                     </Callout>
                 </Marker>
+                <KnownTile />
 
                 <CustomMarker tileDistance={tileDistance} coords={{ latitude: 40.64114, longitude: -8.65403 }} />
                 <CustomMarker tileDistance={tileDistance} coords={{ latitude: 40.63843, longitude: -8.65129 }} />
@@ -195,7 +199,6 @@ export default function Map({ navigation: { navigate } }) {
     );
 }
 /* <CustomMarker tileDistance={tileDistance} coords={{ latitude: 40.64082, longitude: -8.65375 }} */ //este ta fora por ser demasiado proximo de um deles (faz confusão), mas eventualmente será reposto
-//ESCLARECER QUESTÃO DOS AZULEJOS NAO DESCOBERTOS AMANHÃ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -205,7 +208,8 @@ const styles = StyleSheet.create({
     },
     map: {
         width: Dimensions.get("window").width,
-        height: Dimensions.get("window").height - 100,
+        height: Dimensions.get("window").height -50,
+        top:20
     },
 });
 

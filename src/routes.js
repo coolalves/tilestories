@@ -10,6 +10,7 @@ import TileDetails from "./pages/tiles/TileDetails";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useFonts } from 'expo-font';
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import MapModal from "./components/MapModal"
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -18,9 +19,9 @@ const StackNavigator = () => {
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
             <Stack.Navigator initialRouteName="Map">
-                <Stack.Screen name="Map" component={Map} options={{headerShown:false}}/>
-                <Stack.Screen name="Camera" component={CameraScreen} options={{headerShown:false}}/>
-                <Stack.Screen name="Tile" component={TileDetails} options={{headerShown:false}}/>
+                <Stack.Screen name="Map" component={Map} options={{ headerShown: false }} />
+                <Stack.Screen name="Camera" component={CameraScreen} options={{ headerShown: false }} />
+                <Stack.Screen name="Tile" component={TileDetails} options={{ headerShown: false }} />
             </Stack.Navigator>
         </GestureHandlerRootView>
     );
@@ -34,11 +35,13 @@ export default function Routes() {
     return (
         <Tab.Navigator
             initialRouteName="Home"
+             
             screenOptions={{
+                headerShown: false,
                 tabBarStyle: {
                     backgroundColor: '#151F6D',
                     borderTopColor: 'transparent',
-                    height: 50
+                    height: 50,
                 },
                 activeTintColor: 'white',
                 inactiveTintColor: 'grey',
@@ -70,11 +73,11 @@ export default function Routes() {
                 options={{
                     tabBarLabel: '',
                     tabBarIcon: ({ size, color }) => (
-                        <HomeButton size={size} color={color} />
+                        <HomeButton size={28} color={color} />
                     )
                 }}
             />
-            <Tab.Screen name="Account" component={Profile}
+            <Tab.Screen name="Account" component={MapModal}
                 options={{
                     tabBarLabel: '',
                     tabBarIcon: ({ size, color }) => (
@@ -82,7 +85,7 @@ export default function Routes() {
                     )
                 }}
             />
-            
+
         </Tab.Navigator>
     )
 }

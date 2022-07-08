@@ -1,8 +1,7 @@
 import * as React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Marker, Callout } from "react-native-maps";
-import CameraButton from "./CameraButton";
-
+ 
 //import { useState, useEffect } from "react";
 
 
