@@ -11,20 +11,34 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useFonts } from 'expo-font';
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import MapModal from "./components/MapModal"
+import NewAcc from "./pages/login/Newacc"
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
+const log = false;
 
 const StackNavigator = () => {
-    return (
-        <GestureHandlerRootView style={{ flex: 1 }}>
-            <Stack.Navigator initialRouteName="Map">
-                <Stack.Screen name="Map" component={Map} options={{ headerShown: false }} />
-                <Stack.Screen name="Camera" component={CameraScreen} options={{ headerShown: false }} />
-                <Stack.Screen name="Tile" component={TileDetails} options={{ headerShown: false }} />
-            </Stack.Navigator>
-        </GestureHandlerRootView>
-    );
+    if (log == false) {
+        return (
+            <GestureHandlerRootView style={{ flex: 1 }}>
+                <Stack.Navigator initialRouteName="Map">
+                    <Stack.Screen name="Account" component={Profile} options={{ headerShown: false }} />
+                     
+                </Stack.Navigator>
+            </GestureHandlerRootView>
+        );
+    } else {
+        return(
+            <GestureHandlerRootView style={{ flex: 1 }}>
+                <Stack.Navigator initialRouteName="Map">
+                    <Stack.Screen name="Map" component={Map} options={{ headerShown: false }} />
+                    <Stack.Screen name="Camera" component={CameraScreen} options={{ headerShown: false }} />
+                    <Stack.Screen name="Tile" component={TileDetails} options={{ headerShown: false }} />
+                </Stack.Navigator>
+            </GestureHandlerRootView>
+        )
+    }
+
 };
 
 export default function Routes() {
@@ -35,7 +49,7 @@ export default function Routes() {
     return (
         <Tab.Navigator
             initialRouteName="Home"
-             
+
             screenOptions={{
                 headerShown: false,
                 tabBarStyle: {

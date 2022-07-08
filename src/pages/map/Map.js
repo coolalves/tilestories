@@ -43,7 +43,7 @@ export default function Map({ navigation: { navigate } }) {
 
     const myDoc = doc(db, "azulejo", "uid")
 
-    function pullinfo(){
+    function pullinfo() {
         getDoc(myDoc)
             // Handling Promises
             .then((snapshot) => {
@@ -62,7 +62,7 @@ export default function Map({ navigation: { navigate } }) {
                 alert(error.message)
             })
 
-        console.log(tileDoc.name)
+        console.log(tileDoc.photo)
     }
 
 
@@ -95,24 +95,21 @@ export default function Map({ navigation: { navigate } }) {
                 timeInterval: 5
             });
             setLocation(location);
-            if (counter===0){
-            loading();
-            }
+           
             pullinfo();
 
 
-
         })();
-    }, [counter]);
+    }, []);
 
+    
 
-
-    function loading(){
-        setTimeout(function(){
-            setCounter(counter+1);
+   /* function loading() {
+        setTimeout(function () {
+            setCounter(counter + 1);
         }, 5000);
     }
-
+*/
 
 
     const CameraButton = () => {
