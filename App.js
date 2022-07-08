@@ -10,6 +10,7 @@ import CameraScreen from "./src/pages/map/CameraScreen";
 import TileDetails from "./src/pages/tiles/TileDetails";
 import Newacc from "./src/pages/login/Newacc";
 import Login from "./src/pages/login/Login";
+import Landing from "./src/pages/login/Landing";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 //import { useFonts } from 'expo-font';
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -46,7 +47,8 @@ const authContext = useMemo(() => {
 const AuthStackNavigator = () => {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <AuthStack.Navigator initialRouteName="Signup">
+      <AuthStack.Navigator initialRouteName="LandingPage">
+        <AuthStack.Screen name="LandingPage" component={Landing} options={{ headerShown: false }} />
         <AuthStack.Screen name="Signup" component={Newacc} options={{ headerShown: false }} />
         <AuthStack.Screen name="Login" component={Login} options={{ headerShown: false }} />
       </AuthStack.Navigator>
