@@ -32,23 +32,25 @@ export default function Map({ navigation: { navigate } }) {
         longitudeDelta: 0.001,
     });
     const [errorMsg, setErrorMsg] = useState(null);
-    const [tileName, setTileName] = useState("");
+    const [tileName, setTileName] = useState(null);
     const [tileLocation, setTileLocation] = useState({
         latitude: 40.64114,
         longitude: -8.65403,
     });
     const [distanceToTile, setDistanceToTile] = useState(null);
-    const [tileDoc, setTileDoc] = useState(null);
+    const [tileDoc, setTileDoc] = useState({});
 
     const myDoc = doc(db, "azulejo", "uid")
 
-    function bichos() {
+    function pullinfo(){
         getDoc(myDoc)
             // Handling Promises
             .then((snapshot) => {
                 // MARK: Success
                 if (snapshot.exists) {
                     setTileDoc(snapshot.data())
+
+
                 }
                 else {
                     alert("No Doc Found")
@@ -58,8 +60,10 @@ export default function Map({ navigation: { navigate } }) {
                 // MARK: Failure
                 alert(error.message)
             })
-        console.log(tileDoc)
+
+        console.log(tileDoc.name)
     }
+
 
 
     //console.log(tileDoc.geo);
