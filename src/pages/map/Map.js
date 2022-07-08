@@ -39,6 +39,7 @@ export default function Map({ navigation: { navigate } }) {
     });
     const [distanceToTile, setDistanceToTile] = useState(null);
     const [tileDoc, setTileDoc] = useState({});
+    const [counter, setCounter] = useState(0);
 
     const myDoc = doc(db, "azulejo", "uid")
 
@@ -94,9 +95,24 @@ export default function Map({ navigation: { navigate } }) {
                 timeInterval: 5
             });
             setLocation(location);
+            if (counter===0){
+            loading();
+            }
+            pullinfo();
+
+
 
         })();
-    }, []);
+    }, [counter]);
+
+
+
+    function loading(){
+        setTimeout(function(){
+            setCounter(counter+1);
+        }, 5000);
+    }
+
 
 
     const CameraButton = () => {
