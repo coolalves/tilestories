@@ -34,7 +34,7 @@ const KnownTile = (props) => {
                                 <Pressable
                                     style={[styles.button, styles.buttonOpenDetail]}
                                     onPress={() =>
-                                        props.tileDistance(props.coords)
+                                        props.tileDistance(props.coords) && setModalVisible(!modalVisible)
                                     }
                                 >
                                     <Text style={styles.btnTextStyle}>Take a picture</Text>
