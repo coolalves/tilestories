@@ -1,11 +1,6 @@
 import React from 'react';
 import { View, Text, KeyboardAvoidingView, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
-import { initializeApp } from "firebase/app";
-import firebaseConfig from "../../../firebase-config";
-import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
-import { getFirestore } from "firebase/firestore";
-import { AuthContext } from '../../context';
+
 
 const Landing = ({ navigation: { navigate } }) => {
 

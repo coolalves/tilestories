@@ -42,6 +42,7 @@ const Login = () => {
                     .then(() => {
                         // MARK: Success
                         console.log('vai para o firebase!!');
+                        navigate('TabRoutes');
                     })
                     .catch((error) => {
                         // MARK: Failure

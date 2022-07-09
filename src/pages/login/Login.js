@@ -9,7 +9,7 @@ import { AuthContext } from '../../context';
 
 
 
-const Login = () => {
+const Login = ({ navigation: { navigate } }) => {
 
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
@@ -70,6 +70,7 @@ const Login = () => {
                 console.log('Signed In!');
                 const user = userCredential.user;
                 console.log(user);
+                navigate('TabRoutes')
 
             })
             .catch(error => {
