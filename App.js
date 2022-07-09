@@ -118,7 +118,7 @@ function TabRoutes() {
           )
         }}
       />
-      <Tab.Screen name="Account" component={CameraScreen}
+      <Tab.Screen name="Account" component={Profile}
         options={{
           tabBarLabel: '',
           tabBarIcon: ({ size, color }) => (
