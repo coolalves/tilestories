@@ -10,6 +10,7 @@ import { getDistance, getPreciseDistance } from 'geolib';
 import CustomMarker from "../../components/CustomMarker.js";
 //import MapModal from "../../components/MapModal.js";
 import KnownTile from "../../components/KnownTile.js";
+import UnknownTile from "../../components/UnknownTile.js";
 
 import firebaseConfig from "../../../firebase-config";
 import { doc, setDoc, getDoc } from "firebase/firestore";
@@ -95,21 +96,21 @@ export default function Map({ navigation: { navigate } }) {
                 timeInterval: 5
             });
             setLocation(location);
-           
+
             pullinfo();
 
 
         })();
     }, []);
 
-    
 
-   /* function loading() {
-        setTimeout(function () {
-            setCounter(counter + 1);
-        }, 5000);
-    }
-*/
+
+    /* function loading() {
+         setTimeout(function () {
+             setCounter(counter + 1);
+         }, 5000);
+     }
+ */
 
 
     const CameraButton = () => {
@@ -136,7 +137,7 @@ export default function Map({ navigation: { navigate } }) {
 
     const farFromTile = () => {
         Alert.alert("You're too far", "Get closer to the tile so you can take a picture of it!", [
-            { text: "Got it!", /*onPress: () => console.log("got it!") */ }
+            { text: "Got it", /*onPress: () => console.log("got it!") */ }
         ])
     }
 
@@ -171,7 +172,15 @@ export default function Map({ navigation: { navigate } }) {
         console.log(distance)
         setDistanceToTile(distance)
 
+        if (distance < 50) {
+            passLocationToCamera()
+        } else {
+            farFromTile()
+        }
+
     }
+
+
 
     const userLocationParam = {
         latitude: 40.64422,
@@ -242,9 +251,8 @@ export default function Map({ navigation: { navigate } }) {
                     </Callout>
                 </Marker>
                 <KnownTile />
-
-                <CustomMarker tileDistance={tileDistance} coords={{ latitude: 40.64114, longitude: -8.65403 }} />
-                <CustomMarker tileDistance={tileDistance} coords={{ latitude: 40.63843, longitude: -8.65129 }} />
+                <UnknownTile tileDistance={tileDistance} coords={{ latitude: 40.64114, longitude: -8.65403 }} />
+                <UnknownTile tileDistance={tileDistance} coords={{ latitude: 40.63843, longitude: -8.65129 }} />
             </MapView>
 
 
