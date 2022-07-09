@@ -10,7 +10,7 @@ import { getFirestore } from "firebase/firestore";
 
 
 
-const Login = () => {
+const Login = ({ navigation: { navigate } }) => {
 
     const [username, setUsername] = React.useState('');
     const [email, setEmail] = React.useState('');
