@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, View, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { Text, View, StyleSheet, Image, TouchableOpacity, Dimensions } from 'react-native';
 import { ScrollView } from "react-native-gesture-handler";
 
 
@@ -9,6 +9,7 @@ export default function TileDetails(props) {
         <View style={styles.container}>
             <ScrollView>
                 <View style={{ alignItems: 'center', marginHorizontal: 30 }}>
+                <View style={styles.header}/>
                     <Image style={styles.tileImg} source={require('../../../assets/imgs/places/station.jpg')} />
                     <Text style={styles.tileName}>{props.route.params.title}</Text>
                     <Text style={styles.tileCaption}>Lorem Ipsum</Text>
@@ -31,8 +32,8 @@ const styles = StyleSheet.create({
         marginTop: 20,
     },
     tileImg: {
-        width: "100%",
-        height: 180,
+        width: Dimensions.get("window").width,
+        height: 200,
     },
     tileName: {
         fontSize: 28,

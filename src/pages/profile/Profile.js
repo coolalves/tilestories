@@ -49,11 +49,6 @@ const styles = StyleSheet.create({
     top:40
      
   },
-  name: {
-    fontSize: 22,
-    color: "black",
-    fontWeight: '600',
-  },
 
   body: {
     marginTop: 40,
@@ -62,13 +57,13 @@ const styles = StyleSheet.create({
 
   name: {
     fontSize: 28,
-    color: "#696969",
+    color: "#000",
     fontWeight: "600",
     textAlign: 'center'
   },
   info: {
     fontSize: 16,
-    color: "#00BFFF",
+    color: "#696969",
     marginTop: 10,
     textAlign: 'center'
   },
