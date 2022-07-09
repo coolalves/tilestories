@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
     },
     photoo:{
         width: Dimensions.get("window").width,
-        height: Dimensions.get("window").height - 50,
+        height: Dimensions.get("window").height,
         top: 40
     }
 });
