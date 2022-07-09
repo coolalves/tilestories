@@ -113,7 +113,7 @@ export default function Map({ navigation: { navigate } }) {
  */
 
 
-    const CameraButton = () => {
+   /* const CameraButton = () => {
         if (distanceToTile > 50 || distanceToTile == null) {
             return (<Pressable
                 onPress={() =>
@@ -133,7 +133,21 @@ export default function Map({ navigation: { navigate } }) {
             <MaterialIcons name="add-a-photo" size={28} color="grey" />
         </Pressable >)
 
-    };
+    };*/
+
+    const AddTile = () =>{
+        return (<Pressable
+            onPress={() =>
+                passLocationToCamera()
+            }
+            style={buttonstyles.buttonContainer}
+        >
+            <Image source={require('../../../assets/imgs/addtile.png')} style={{width:40, height:40}} />
+            <Text style={{textAlign:"center", fontWeight:"bold", fontSize:12, color:"white", paddingTop:5}}>
+                add tile
+            </Text>
+        </Pressable >)
+    }
 
     const farFromTile = () => {
         Alert.alert("You're too far", "Get closer to the tile so you can take a picture of it!", [
@@ -206,7 +220,7 @@ export default function Map({ navigation: { navigate } }) {
 
     return (
         <View style={styles.container}>
-            <CameraButton />
+            <AddTile />
             <MapView
                 ref={mapRef}
                 style={styles.map}
@@ -281,8 +295,8 @@ const buttonstyles = StyleSheet.create({
         left: "2%",
         padding: 4,
         zIndex: 2,
-        backgroundColor: "#fff",
-        borderRadius: 6,
+        backgroundColor: "transparent",
+        borderRadius: 60,
     }
 });
 
