@@ -139,21 +139,21 @@ const styles = StyleSheet.create({
   },
 
   name: {
-    fontSize: 28,
+    fontSize: 22,
     color: "#000",
     fontWeight: "600",
     textAlign: 'center'
   },
   info: {
-    fontSize: 16,
+    fontSize: 13,
     color: "#696969",
-    marginTop: 10,
+    marginTop: 5,
     textAlign: 'center'
   },
   description: {
-    fontSize: 16,
+    fontSize: 13,
     color: "#696969",
-    marginTop: 10,
+    marginTop: 0,
     textAlign: 'center'
   },
 

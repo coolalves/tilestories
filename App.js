@@ -73,6 +73,9 @@ function TabRoutes() {
       NotoSans: require('../assets/fonts/NotoSans-Bold.ttf'),
     });*/
 
+  let selectedIconColor = "#5C75DD";
+  let iconColor = "white";
+
   return (
 
     <Tab.Navigator
@@ -82,7 +85,10 @@ function TabRoutes() {
         tabBarStyle: {
           backgroundColor: '#151F6D',
           borderTopColor: 'transparent',
-          height: 50,
+          height: 60,
+          borderTopLeftRadius:15,
+          borderTopRightRadius:15,
+          position:"absolute"
         },
         activeTintColor: 'white',
         inactiveTintColor: 'grey',
@@ -92,7 +98,7 @@ function TabRoutes() {
         },
         title: "tilestories",
         headerStyle: {
-          backgroundColor: '#151F6D',
+          backgroundColor: '#5C75DD',
           borderEndColor: 'red',
         },
         headerTintColor: 'white',
@@ -106,7 +112,7 @@ function TabRoutes() {
         options={{
           tabBarLabel: '',
           tabBarIcon: ({ size, color }) => (
-            <MaterialCommunityIcons name="medal" size={28} color="white" />
+            <MaterialCommunityIcons name="medal" size={28} tab color="white" />
           )
         }}
       />
