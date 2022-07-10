@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { View, Text, KeyboardAvoidingView, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { initializeApp } from "firebase/app";
 import firebaseConfig from "../../../firebase-config";
@@ -6,6 +6,7 @@ import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } f
 import { doc, setDoc } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
 import { AuthContext } from '../../context';
+import { auth } from "firebase/compat";
 
 
 
@@ -45,6 +46,14 @@ const Login = ({ navigation: { navigate } }) => {
                         // MARK: Failure
                         alert(error.message)
                     })
+
+                useEffect(()=>{
+                    firebase.auth().onAuthStateChanged((user) => {
+                        if (user) {
+                            console.log('User email: ', user.email);
+                        }
+                    });
+                })
 
 
             })

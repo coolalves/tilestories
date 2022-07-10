@@ -12,9 +12,15 @@ import CustomMarker from "../../components/CustomMarker.js";
 import KnownTile from "../../components/KnownTile.js";
 import UnknownTile from "../../components/UnknownTile.js";
 
+<<<<<<< Updated upstream
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import firebaseConfig from "../../../firebase-config";
 import { doc, setDoc, getDoc, collection, getDocs } from "firebase/firestore";
+=======
+import {getAuth, onAuthStateChanged } from "firebase/auth";
+import firebaseConfig from "../../../firebase-config";
+import { doc, setDoc, getDoc,collection, getDocs } from "firebase/firestore";
+>>>>>>> Stashed changes
 import { getFirestore } from "firebase/firestore";
 import { initializeApp } from "firebase/app";
 import { Button } from "react-native-web";
@@ -24,7 +30,11 @@ import { Button } from "react-native-web";
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth();
+<<<<<<< Updated upstream
 var loca = [];
+=======
+var loca=[];
+>>>>>>> Stashed changes
 
 export default function Map({ navigation: { navigate } }) {
 
@@ -53,7 +63,11 @@ export default function Map({ navigation: { navigate } }) {
             // https://firebase.google.com/docs/reference/js/firebase.User
             const uid = user.uid;
 
+<<<<<<< Updated upstream
             console.log("user uid:", uid);
+=======
+            console.log("user uid:",uid);
+>>>>>>> Stashed changes
             // ...
         } else {
             // User is signed out
@@ -117,6 +131,10 @@ export default function Map({ navigation: { navigate } }) {
             });
 
             setLocation(location);
+<<<<<<< Updated upstream
+
+=======
+>>>>>>> Stashed changes
 
 
 
@@ -129,9 +147,21 @@ export default function Map({ navigation: { navigate } }) {
         })();
     }, []);
 
+<<<<<<< Updated upstream
+    useEffect(() => {
+        (async () => {
+            await pullinfo();
+        })();
+    }, []);
 
 
 
+
+=======
+
+
+
+>>>>>>> Stashed changes
     /*  const CameraButton = () => {
          if (distanceToTile > 50 || distanceToTile == null) {
              return (<Pressable
@@ -154,23 +184,38 @@ export default function Map({ navigation: { navigate } }) {
 
      };*/
 
+<<<<<<< Updated upstream
     const AddTile = () => {
+=======
+    const AddTile = () =>{
+>>>>>>> Stashed changes
         return (<Pressable
             onPress={() =>
                 passLocationToCamera()
             }
             style={buttonstyles.buttonContainer}
         >
+<<<<<<< Updated upstream
             <Image source={require('../../../assets/imgs/addtile.png')} style={{ width: 40, height: 40 }} />
             <Text style={{ textAlign: "center", fontWeight: "bold", fontSize: 12, color: "white", paddingTop: 5 }}>
+=======
+            <Image source={require('../../../assets/imgs/addtile.png')} style={{width:40, height:40}} />
+            <Text style={{textAlign:"center", fontWeight:"bold", fontSize:12, color:"white", paddingTop:5}}>
+>>>>>>> Stashed changes
                 add tile
             </Text>
         </Pressable >)
     }
 
+<<<<<<< Updated upstream
     const farFromTile = () => {
         Alert.alert("You're too far", "Get closer to the tile so you can take a picture of it!", [
             { text: "Got it!", /*onPress: () => console.log("got it!") */ }
+=======
+     const farFromTile = () => {
+         Alert.alert("You're too far", "Get closer to the tile so you can take a picture of it!", [
+             { text: "Got it!", /*onPress: () => console.log("got it!") */ }
+>>>>>>> Stashed changes
         ])
     }
 
@@ -230,6 +275,7 @@ export default function Map({ navigation: { navigate } }) {
     let markerTitle = "Old train station";
 
 
+<<<<<<< Updated upstream
     /* let markerjsx
      if (geoo === undefined){
          console.log("loading out....")
@@ -258,13 +304,47 @@ export default function Map({ navigation: { navigate } }) {
         for (let i = 0; i < userDataArray.length; i++) {
             console.log("A ver vamos ", i);
             loca[i] = <CustomMarker key={i} tileDistance={tileDistance} coords={{ latitude: userDataArray[i].geo.latitude, longitude: userDataArray[i].geo.longitude }} />
+=======
+   /* let markerjsx
+    if (geoo === undefined){
+        console.log("loading out....")
+    }else{
+        console.log("geos",geoo.latitude)
+        console.log("geo2",geoo.longitude)
+        markerjsx=<CustomMarker tileDistance={tileDistance} coords={{ latitude: geoo.latitude, longitude: geoo.longitude }} />
+    }*/
+
+   /* if (geoo===undefined){
+        console.log("its loading");
+    }else{
+        for (let i=1; i<=numeroazul; i++){
+
+            var sti=toString(i);
+
+            locaa[i]=geoo.sti.geo.latitude
+            locao[i]=geoo.sti.geo.longitude
+        }
+        console.log("esta é a loca", locaa);
+    }*/
+
+    if (userDataArray.length==0){
+        console.log("loading...");
+    }else{
+        for (let i=0;i<userDataArray.length;i++){
+            console.log("A ver vamos ", i);
+            loca[i]=<CustomMarker key={i} tileDistance={tileDistance} coords={{ latitude: userDataArray[i].geo.latitude, longitude: userDataArray[i].geo.longitude }} />
+>>>>>>> Stashed changes
         }
 
 
     }
     return (
         <View style={styles.container}>
+<<<<<<< Updated upstream
             <AddTile />
+=======
+            <AddTile/>
+>>>>>>> Stashed changes
             <MapView
                 ref={mapRef}
                 style={styles.map}

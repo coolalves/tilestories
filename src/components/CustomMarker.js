@@ -6,7 +6,7 @@ import { Marker, Callout } from "react-native-maps";
 
 
 const CustomMarker = (props) => {
-
+    console.log("props",props.coords);
 
     return (
         <Marker
