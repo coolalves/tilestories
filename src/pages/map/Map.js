@@ -158,7 +158,7 @@ export default function Map({ navigation: { navigate } }) {
             style={buttonstyles.buttonContainer}
         >
             <Image source={require('../../../assets/imgs/addtile.png')} style={{ width: 40, height: 40 }} />
-            <Text style={{ textAlign: "center", fontWeight: "bold", fontSize: 12, color: "white", paddingTop: 5 }}>
+            <Text style={{ textAlign: "center", fontWeight: "bold", fontSize: 12, color: "#5C75DD", paddingTop: 5 }}>
                 add tile
             </Text>
         </Pressable >)
@@ -192,9 +192,9 @@ export default function Map({ navigation: { navigate } }) {
     const tileDistance = async (coordinates) => {
         console.log("cords la dentro", coordinates);
         let location = await Location.getLastKnownPositionAsync();
-        console.log("localização",location);
+        console.log("localização", location);
         setLocation(location);
-        console.log("localizaçãomaxima",location.coords.latitude);
+        console.log("localizaçãomaxima", location.coords.latitude);
 
         let distance = getPreciseDistance(
             { latitude: location.coords.latitude, longitude: location.coords.longitude },
@@ -202,7 +202,7 @@ export default function Map({ navigation: { navigate } }) {
         );
 
         // let distanceInKM = (distance / 1000 + "km")
-        console.log("mono",distance);
+        console.log("mono", distance);
         setDistanceToTile(distance)
         if (distance < 50) {
             passLocationToCamera()
@@ -338,7 +338,7 @@ const styles = StyleSheet.create({
     },
     map: {
         width: Dimensions.get("window").width,
-        height: Dimensions.get("window").height - 50,
+        height: Dimensions.get("window").height + 10,
         top: 20
     },
 });
