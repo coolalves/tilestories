@@ -25,6 +25,8 @@ export default function Profile() {
   const [userName, setUserName] = useState(null)
   const useruid="4to1jIMqQAYtyBZHZFYzlF9gvIP2";
   var nomi;
+  var email;
+  var register;
 
 
 
@@ -84,6 +86,8 @@ export default function Profile() {
     console.log("loadong")
   }else{
     nomi=userDoc.name;
+    email=userDoc.email;
+    register=userDoc.resgisterDate;
   }
 
 
