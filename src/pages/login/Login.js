@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, KeyboardAvoidingView, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { initializeApp } from "firebase/app";
 import firebaseConfig from "../../../firebase-config";
@@ -47,7 +47,7 @@ const Login = ({ navigation: { navigate } }) => {
                         alert(error.message)
                     })
 
-                useEffect(()=>{
+                useEffect(() => {
                     firebase.auth().onAuthStateChanged((user) => {
                         if (user) {
                             console.log('User email: ', user.email);
@@ -186,8 +186,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#5C75DD',
         marginTop: 5,
         marginBottom: 8,
-         
-         
+
+
 
     },
     buttonText: {

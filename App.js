@@ -14,6 +14,8 @@ import Landing from "./src/pages/login/Landing";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 //import { useFonts } from 'expo-font';
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import Loading from "./src/components/Loading";
+
 //import MapModal from "./components/MapModal"
 //import { AuthContext } from "./context";
 
@@ -51,6 +53,7 @@ const AuthStackNavigator = () => {
         <AuthStack.Screen name="LandingPage" component={Landing} options={{ headerShown: false }} />
         <AuthStack.Screen name="Signup" component={Newacc} options={{ headerShown: false }} />
         <AuthStack.Screen name="Login" component={Login} options={{ headerShown: false }} />
+        <AuthStack.Screen name="Loading" component={Loading} options={{ headerShown: false }} />
       </AuthStack.Navigator>
     </GestureHandlerRootView>
   );
@@ -86,9 +89,9 @@ function TabRoutes() {
           backgroundColor: '#151F6D',
           borderTopColor: 'transparent',
           height: 60,
-          borderTopLeftRadius:15,
-          borderTopRightRadius:15,
-          position:"absolute"
+          borderTopLeftRadius: 15,
+          borderTopRightRadius: 15,
+          position: "absolute"
         },
         activeTintColor: 'white',
         inactiveTintColor: 'grey',
