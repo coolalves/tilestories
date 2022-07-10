@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component, useEffect, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -6,8 +6,87 @@ import {
   Image,
   TouchableOpacity
 } from 'react-native';
+import {getAuth, onAuthStateChanged} from "firebase/auth";
+import {initializeApp} from "firebase/app";
+import firebaseConfig from "../../../firebase-config";
+import {doc, getDoc, getFirestore} from "firebase/firestore";
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth();
+
+
 
 export default function Profile() {
+
+  const [userDoc, setUserDoc] = useState(null)
+  //const [useruid, setUserUid] = useState(undefined)
+  const [useremail, setUserEmail] = useState(null)
+  const [userName, setUserName] = useState(null)
+  const useruid="4to1jIMqQAYtyBZHZFYzlF9gvIP2";
+  var nomi;
+
+
+
+
+  const buscaruid =()=> {
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUserUid(user.uid);
+        console.log("useruid", useruid);
+
+      } else {
+        // User is signed out
+      }
+    });
+  }
+
+  //buscaruid();
+
+
+
+
+  const doIT = async ()=>{
+
+    // You can read what ever document by changing the collection and document path here
+     const myDoc = doc(db, "users", useruid)
+
+        getDoc(myDoc)
+        // Handling Promises
+        .then((snapshot) => {
+          // MARK: Success
+          if (snapshot.exists) {
+            setUserDoc(snapshot.data())
+
+          }
+          else {
+            alert("No Doc Found")
+          }
+        })
+        .catch((error) => {
+          // MARK: Failure
+          alert(error.message)
+        })
+
+  }
+
+  useEffect(() => {
+    ( () => {
+      doIT()
+    })();
+  }, []);
+
+
+  console.log("aqui",userDoc);
+
+  if (userDoc==null){
+    console.log("loadong")
+  }else{
+    nomi=userDoc.name;
+  }
+
+
 
 
   return (
@@ -19,7 +98,7 @@ export default function Profile() {
       <View style={styles.body}>
 
         <View style={styles.textContainer} >
-          <Text style={styles.name}>User Name</Text>
+          <Text style={styles.name}>{nomi}</Text>
           <Text style={styles.info}>Level</Text>
           <Text style={styles.description}>Description</Text>
         </View>

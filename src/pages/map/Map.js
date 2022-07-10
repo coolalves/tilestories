@@ -26,6 +26,7 @@ const db = getFirestore(app);
 const auth = getAuth();
 var loca = [];
 
+
 export default function Map({ navigation: { navigate } }) {
 
     const mapRef = React.createRef();
@@ -49,15 +50,10 @@ export default function Map({ navigation: { navigate } }) {
 
     onAuthStateChanged(auth, (user) => {
         if (user) {
-            // User is signed in, see docs for a list of available properties
-            // https://firebase.google.com/docs/reference/js/firebase.User
             const uid = user.uid;
 
-
-            // console.log("user uid:", uid);
         } else {
             // User is signed out
-            // ...
         }
     });
 
@@ -396,3 +392,4 @@ const callouts = StyleSheet.create({
 
     },
 });
+
