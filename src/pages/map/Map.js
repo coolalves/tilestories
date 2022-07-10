@@ -286,33 +286,7 @@ export default function Map({ navigation: { navigate } }) {
                 showsBuildings={true}
                 showsIndoorLevelPicker={true}
             >
-                <Marker
-                    coordinate={{
-                        latitude: 40.64422,
-                        longitude: -8.64071,
-                    }}
-                    title={markerTitle}
-                    description="test description"
-                    image={require("../../../assets/imgs/tileicon.png")}
-                >
-                    <Callout tooltip onPress={(e) =>
-                        tileDetail(markerTitle)
-
-                    }>
-                        <View >
-                            <View style={callouts.bubble}>
-                                <Text style={callouts.title}>Old train station</Text>
-                                {/* <Text>A short description</Text> */}
-                                <Image
-                                    style={callouts.image}
-                                    source={require('../../../assets/imgs/places/station.jpg')}
-                                />
-                            </View>
-                            <View style={callouts.arrowBorder} />
-                            <View style={callouts.arrow} />
-                        </View>
-                    </Callout>
-                </Marker>
+                 
                 <KnownTile />
                 {/*<CustomMarker tileDistance={tileDistance} coords={{ latitude: 40.64114, longitude: -8.65403 }} />*/}
                 {/*<CustomMarker tileDistance={tileDistance} coords={{ latitude: 40.63843, longitude: -8.65129 }} />*/}
@@ -335,10 +309,13 @@ const styles = StyleSheet.create({
         backgroundColor: "#151F6D",
         alignItems: "center",
         justifyContent: "center",
+        width: Dimensions.get("window").width,
+        height: Dimensions.get("window").height 
+
     },
     map: {
         width: Dimensions.get("window").width,
-        height: Dimensions.get("window").height + 10,
+        height: Dimensions.get("window").height  ,
         top: 20
     },
 });

@@ -1,5 +1,5 @@
 import * as React from "react";
-import {StyleSheet, Text, View, SafeAreaView, Button, Image, useWindowDimensions, Dimensions} from "react-native";
+import { StyleSheet, Text, View, SafeAreaView, Button, Image, useWindowDimensions, Dimensions } from "react-native";
 import { useState, useEffect, useRef } from "react";
 import { Camera } from "expo-camera";
 import * as MediaLibrary from 'expo-media-library'
@@ -7,9 +7,9 @@ import { StatusBar } from "expo-status-bar";
 import { shareAsync } from "expo-sharing";
 import Pressable from "react-native/Libraries/Components/Pressable/Pressable";
 import { getStorage, ref, uploadBytes, } from 'firebase/storage';
-import {doc, setDoc, getDoc, updateDoc} from "firebase/firestore";
-import {getFirestore} from "firebase/firestore";
-import {initializeApp} from "firebase/app";
+import { doc, setDoc, getDoc, updateDoc } from "firebase/firestore";
+import { getFirestore } from "firebase/firestore";
+import { initializeApp } from "firebase/app";
 
 
 
@@ -25,8 +25,8 @@ const firebaseConfig = {
 };
 
 
-const app=initializeApp(firebaseConfig);
-const db= getFirestore(app);
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 const storage = getStorage(app);
 
 export default function CameraScreen(location) {
@@ -70,12 +70,12 @@ export default function CameraScreen(location) {
             const storage = getStorage(); //the storage itself
             const refi = ref(storage, 'monalisa/image3.jpg'); //how the image will be addressed inside the storage
             //convert image to array of bytes
-            const img =  await fetch(photo.uri);
+            const img = await fetch(photo.uri);
             console.log("img3");
 
             const bytes = await img.blob();
 
-             uploadBytes(refi, bytes); //upload images
+            uploadBytes(refi, bytes); //upload images
 
         }
 
@@ -100,13 +100,15 @@ export default function CameraScreen(location) {
     }
 
     return (
-            <Camera style={[styles.cameraContainer]} ref={cameraRef}>
+        <Camera style={[styles.cameraContainer]} ref={cameraRef}>
 
-                <Pressable style={styles.buttonContainer} onPress={takePhoto}>
-                    <Text style={styles.buttonText}> Take Photo</Text>
-                </Pressable>
-                <StatusBar style="auto" />
-            </Camera>
+            <View style={styles.buttonContainer}>
+                <Pressable   onPress={takePhoto} />
+                <Text style={styles.buttonText}> Take Photo</Text>
+            </View>
+
+
+        </Camera>
 
     );
 }
@@ -134,12 +136,12 @@ const styles = StyleSheet.create({
     },
     preview: {
         backgroundColor: "#151F6D",
-        alignSelf:'stretch',
+        alignSelf: 'stretch',
         flex: 1
     },
-    photoo:{
+    photoo: {
         width: Dimensions.get("window").width,
         height: Dimensions.get("window").height,
-        top: 40
+        top: 20
     }
 });
