@@ -12,8 +12,9 @@ import CustomMarker from "../../components/CustomMarker.js";
 import KnownTile from "../../components/KnownTile.js";
 import UnknownTile from "../../components/UnknownTile.js";
 
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import firebaseConfig from "../../../firebase-config";
-import { doc, setDoc, getDoc } from "firebase/firestore";
+import { doc, setDoc, getDoc, collection, getDocs } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
 import { initializeApp } from "firebase/app";
 import { Button } from "react-native-web";
@@ -22,6 +23,8 @@ import { Button } from "react-native-web";
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const auth = getAuth();
+var loca = [];
 
 export default function Map({ navigation: { navigate } }) {
 
@@ -40,31 +43,48 @@ export default function Map({ navigation: { navigate } }) {
     });
     const [distanceToTile, setDistanceToTile] = useState(null);
     const [tileDoc, setTileDoc] = useState({});
-    const [counter, setCounter] = useState(0);
+    const [geoo, setGeoo] = useState(undefined);
+    const [userDataArray, setUserDataArray] = useState([]);
 
-    const myDoc = doc(db, "azulejo", "uid")
+
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            // User is signed in, see docs for a list of available properties
+            // https://firebase.google.com/docs/reference/js/firebase.User
+            const uid = user.uid;
+
+            console.log("user uid:", uid);
+            // ...
+        } else {
+            // User is signed out
+            // ...
+        }
+    });
+
+
+    const myDoc = collection(db, "azulejo")
 
     function pullinfo() {
-        getDoc(myDoc)
-            // Handling Promises
-            .then((snapshot) => {
-                // MARK: Success
-                if (snapshot.exists) {
-                    setTileDoc(snapshot.data())
+        getDocs(collection(db, "azulejo"))
+            .then((querySnapshot) => {
 
 
-                }
-                else {
-                    alert("No Doc Found")
-                }
+                const newUserDataArray = querySnapshot.docs
+                    .map((doc) => ({ ...doc.data(), id: doc.id }));
+
+                setUserDataArray(newUserDataArray);
             })
-            .catch((error) => {
-                // MARK: Failure
-                alert(error.message)
-            })
+            .catch((err) => {
 
-        console.log(tileDoc.photo)
+                // TODO: Handle errors
+                console.error("Failed to retrieve data", err);
+            });
+
+
+
+
     }
+
 
 
 
@@ -95,55 +115,54 @@ export default function Map({ navigation: { navigate } }) {
                 enableHighAccuracy: true,
                 timeInterval: 5
             });
+
             setLocation(location);
 
-            pullinfo();
 
 
         })();
     }, []);
 
+    useEffect(() => {
+        (async () => {
+            await pullinfo();
+        })();
+    }, []);
 
 
-    /* function loading() {
-         setTimeout(function () {
-             setCounter(counter + 1);
-         }, 5000);
-     }
- */
 
 
-   /* const CameraButton = () => {
-        if (distanceToTile > 50 || distanceToTile == null) {
-            return (<Pressable
-                onPress={() =>
-                    farFromTile() //o utilizador está a mais de 50m do azulejo por isso não pode tentar fotografar
-                }
-                style={buttonstyles.buttonContainer}
-            >
-                <MaterialIcons name="add-a-photo" size={28} color="#d1d1d1" />
-            </Pressable >
-            )
-        } else return (<Pressable
-            onPress={() =>
-                passLocationToCamera()
-            }
-            style={buttonstyles.buttonContainer}
-        >
-            <MaterialIcons name="add-a-photo" size={28} color="grey" />
-        </Pressable >)
+    /*  const CameraButton = () => {
+         if (distanceToTile > 50 || distanceToTile == null) {
+             return (<Pressable
+                 onPress={() =>
+                     farFromTile() //o utilizador está a mais de 50m do azulejo por isso não pode tentar fotografar
+                 }
+                 style={buttonstyles.buttonContainer}
+             >
+                 <MaterialIcons name="add-a-photo" size={28} color="#d1d1d1" />
+             </Pressable >
+             )
+         } else return (<Pressable
+             onPress={() =>
+                 passLocationToCamera()
+             }
+             style={buttonstyles.buttonContainer}
+         >
+             <MaterialIcons name="add-a-photo" size={28} color="grey" />
+         </Pressable >)
 
-    };*/
+     };*/
 
-    const AddTile = () =>{
+    const AddTile = () => {
         return (<Pressable
             onPress={() =>
                 passLocationToCamera()
             }
             style={buttonstyles.buttonContainer}
         >
-            <Image source={require('../../../assets/imgs/addtile.png')} style={{width:40, height:40}} />
-            <Text style={{textAlign:"center", fontWeight:"bold", fontSize:12, color:"white", paddingTop:5}}>
+            <Image source={require('../../../assets/imgs/addtile.png')} style={{ width: 40, height: 40 }} />
+            <Text style={{ textAlign: "center", fontWeight: "bold", fontSize: 12, color: "white", paddingTop: 5 }}>
                 add tile
             </Text>
         </Pressable >)
@@ -151,7 +170,7 @@ export default function Map({ navigation: { navigate } }) {
 
     const farFromTile = () => {
         Alert.alert("You're too far", "Get closer to the tile so you can take a picture of it!", [
-            { text: "Got it", /*onPress: () => console.log("got it!") */ }
+            { text: "Got it!", /*onPress: () => console.log("got it!") */ }
         ])
     }
 
@@ -186,15 +205,7 @@ export default function Map({ navigation: { navigate } }) {
         console.log(distance)
         setDistanceToTile(distance)
 
-        if (distance < 50) {
-            passLocationToCamera()
-        } else {
-            farFromTile()
-        }
-
     }
-
-
 
     const userLocationParam = {
         latitude: 40.64422,
@@ -218,6 +229,39 @@ export default function Map({ navigation: { navigate } }) {
     //console.log(userLatitude + userLongitude + "deu")
     let markerTitle = "Old train station";
 
+
+    /* let markerjsx
+     if (geoo === undefined){
+         console.log("loading out....")
+     }else{
+         console.log("geos",geoo.latitude)
+         console.log("geo2",geoo.longitude)
+         markerjsx=<CustomMarker tileDistance={tileDistance} coords={{ latitude: geoo.latitude, longitude: geoo.longitude }} />
+     }*/
+
+    /* if (geoo===undefined){
+         console.log("its loading");
+     }else{
+         for (let i=1; i<=numeroazul; i++){
+ 
+             var sti=toString(i);
+ 
+             locaa[i]=geoo.sti.geo.latitude
+             locao[i]=geoo.sti.geo.longitude
+         }
+         console.log("esta é a loca", locaa);
+     }*/
+
+    if (userDataArray.length == 0) {
+        console.log("loading...");
+    } else {
+        for (let i = 0; i < userDataArray.length; i++) {
+            console.log("A ver vamos ", i);
+            loca[i] = <CustomMarker key={i} tileDistance={tileDistance} coords={{ latitude: userDataArray[i].geo.latitude, longitude: userDataArray[i].geo.longitude }} />
+        }
+
+
+    }
     return (
         <View style={styles.container}>
             <AddTile />
@@ -265,8 +309,14 @@ export default function Map({ navigation: { navigate } }) {
                     </Callout>
                 </Marker>
                 <KnownTile />
-                <UnknownTile tileDistance={tileDistance} coords={{ latitude: 40.64114, longitude: -8.65403 }} />
-                <UnknownTile tileDistance={tileDistance} coords={{ latitude: 40.63843, longitude: -8.65129 }} />
+
+                {/*<CustomMarker tileDistance={tileDistance} coords={{ latitude: 40.64114, longitude: -8.65403 }} />*/}
+                {/*<CustomMarker tileDistance={tileDistance} coords={{ latitude: 40.63843, longitude: -8.65129 }} />*/}
+                {/*<CustomMarker tileDistance={tileDistance} coords={{ geoo }} />*/}
+                {/*markerjsx*/}
+                {loca}
+
+
             </MapView>
 
 
