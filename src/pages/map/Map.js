@@ -53,8 +53,8 @@ export default function Map({ navigation: { navigate } }) {
             // https://firebase.google.com/docs/reference/js/firebase.User
             const uid = user.uid;
 
-            console.log("user uid:", uid);
-            // ...
+
+            // console.log("user uid:", uid);
         } else {
             // User is signed out
             // ...
@@ -194,16 +194,25 @@ export default function Map({ navigation: { navigate } }) {
     //console.log(location)
 
     const tileDistance = async (coordinates) => {
+        console.log("cords la dentro", coordinates);
         let location = await Location.getLastKnownPositionAsync();
+        console.log("localização",location);
         setLocation(location);
+        console.log("localizaçãomaxima",location.coords.latitude);
+
         let distance = getPreciseDistance(
             { latitude: location.coords.latitude, longitude: location.coords.longitude },
             { latitude: coordinates.latitude, longitude: coordinates.longitude }
         );
 
         // let distanceInKM = (distance / 1000 + "km")
-        console.log(distance)
+        console.log("mono",distance);
         setDistanceToTile(distance)
+        if (distance < 50) {
+            passLocationToCamera()
+        } else {
+            farFromTile()
+        }
 
     }
 
@@ -256,7 +265,7 @@ export default function Map({ navigation: { navigate } }) {
         console.log("loading...");
     } else {
         for (let i = 0; i < userDataArray.length; i++) {
-            console.log("A ver vamos ", i);
+
             loca[i] = <UnknownTile key={i} tileDistance={tileDistance} coords={{ latitude: userDataArray[i].geo.latitude, longitude: userDataArray[i].geo.longitude }} />
         }
 
@@ -309,12 +318,11 @@ export default function Map({ navigation: { navigate } }) {
                     </Callout>
                 </Marker>
                 <KnownTile />
-
                 {/*<CustomMarker tileDistance={tileDistance} coords={{ latitude: 40.64114, longitude: -8.65403 }} />*/}
                 {/*<CustomMarker tileDistance={tileDistance} coords={{ latitude: 40.63843, longitude: -8.65129 }} />*/}
                 {/*<CustomMarker tileDistance={tileDistance} coords={{ geoo }} />*/}
                 {/*markerjsx*/}
-                <KnownTile />
+
                 {loca}
 
 
