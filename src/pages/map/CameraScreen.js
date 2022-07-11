@@ -115,6 +115,7 @@ export default function CameraScreen(location) {
     };
 
     let takePhoto = async () => {
+        console.log("estou aqui")
         let options = {
             quality: 0.1,
             base64: true,
@@ -122,6 +123,7 @@ export default function CameraScreen(location) {
         };
 
         let newPhoto = await cameraRef.current.takePictureAsync(options);
+        console.log("depois do new photo")
         setPhoto(newPhoto);
     };
 
@@ -168,12 +170,15 @@ export default function CameraScreen(location) {
                 style={[styles.cameraPreview, { marginTop: imagePadding, marginBottom: imagePadding }]}
                 onCameraReady={setCameraReady}
                 ratio={ratio}
-                ref={(ref) => {
+                ref={async(ref) => {
                     setCamera(ref);
+                    let newPhoto=await cameraRef.current.takePictureAsync(options);
+                    setPhoto(newPhoto);
                 }}>
                 <View style={styles.buttonContainer}>
-                    <Pressable onPress={takePhoto} />
-                    <Text style={styles.buttonText}> Take Photo</Text>
+                    <Pressable onPress={takePhoto}>
+                        <Text style={styles.buttonText}> Take Photo</Text>
+                    </Pressable>
                 </View>
 
             </Camera>
