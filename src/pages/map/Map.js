@@ -272,7 +272,7 @@ export default function Map({ navigation: { navigate } }) {
 
     setTimeout(() => {
         setLoading(false) //this.props.navigation.navigate('Login')
-    }, 5000); 
+    }, 5500); 
 
     if (loading != false) {
         return (
