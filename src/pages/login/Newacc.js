@@ -42,7 +42,7 @@ const Login = ({ navigation: { navigate } }) => {
                     .then(() => {
                         // MARK: Success
                         console.log('vai para o firebase!!');
-                        navigate('TabRoutes');
+                        navigate('TutorialOne');
                     })
                     .catch((error) => {
                         // MARK: Failure

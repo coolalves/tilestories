@@ -1,30 +1,25 @@
-import { React, useState } from 'react';
+import { React } from 'react';
 import { View, Text, KeyboardAvoidingView, StyleSheet, Image, Dimensions } from 'react-native';
 
 
-const Loading = () => {
+const PageThree = ({ navigation: { navigate } }) => {
 
-    /* setTimeout(() => {
-         navigate('TabRoutes'); //this.props.navigation.navigate('Login')
-     }, 5000); */
+    setTimeout(() => {
+        navigate('TutorialFour'); //this.props.navigation.navigate('Login')
+    }, 5000);
+
     return (
         <KeyboardAvoidingView
             style={styles.loadingContainer}
         >
             <View>
                 <Image
-                    source={require('../../assets/icon.png')}
+                    source={require('../../../assets/imgs/tutorial/3.png')}
                     style={styles.loadingFotinha}
-
                 ></Image>
             </View>
 
-            <Text style={styles.loadingTextBranco}>
-                Getting tiles ready!
-            </Text>
-            <Text style={styles.loadingTextBranco2}>
-                Please wait...
-            </Text>
+             
 
         </KeyboardAvoidingView>
 
@@ -42,8 +37,8 @@ const styles = StyleSheet.create({
     },
     loadingFotinha: {
         marginBottom: 80,
-        width: 150,
-        height: 150
+        width: 300,
+        height: 300
     },
     loadingTextBranco: {
         color: 'white',
@@ -60,4 +55,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default Loading;
+export default PageThree;
