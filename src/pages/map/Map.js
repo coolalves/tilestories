@@ -65,8 +65,7 @@ export default function Map({ navigation: { navigate } }) {
             .then((querySnapshot) => {
 
 
-                const newUserDataArray = querySnapshot.docs
-                    .map((doc) => ({ ...doc.data(), id: doc.id }));
+                const newUserDataArray = querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
 
                 setUserDataArray(newUserDataArray);
             })
