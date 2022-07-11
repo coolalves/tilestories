@@ -10,7 +10,7 @@ import {getAuth, onAuthStateChanged} from "firebase/auth";
 import {initializeApp} from "firebase/app";
 import firebaseConfig from "../../../firebase-config";
 import {doc, getDoc, getFirestore} from "firebase/firestore";
-
+import { PersonalGallery } from '../../components/PersonalGallery';
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth();
@@ -106,6 +106,7 @@ export default function Profile() {
           <Text style={styles.info}>Level</Text>
           <Text style={styles.description}>Description</Text>
         </View>
+        <PersonalGallery/>
 
       </View>
     </View>

@@ -19,6 +19,8 @@ import { getFirestore } from "firebase/firestore";
 import { initializeApp } from "firebase/app";
 import { Button } from "react-native-web";
 
+import Loading from "../../components/Loading"
+
 //import { CameraButton } from '../../components/CameraButton';
 
 const app = initializeApp(firebaseConfig);
@@ -46,6 +48,7 @@ export default function Map({ navigation: { navigate } }) {
     const [tileDoc, setTileDoc] = useState({});
     const [geoo, setGeoo] = useState(undefined);
     const [userDataArray, setUserDataArray] = useState([]);
+    const [loading, setLoading] = useState(true);
 
 
     onAuthStateChanged(auth, (user) => {
@@ -256,76 +259,63 @@ export default function Map({ navigation: { navigate } }) {
          console.log("esta é a loca", locaa);
      }*/
 
+
+
     if (userDataArray.length == 0) {
         console.log("loading...");
     } else {
         for (let i = 0; i < userDataArray.length; i++) {
-
             loca[i] = <UnknownTile key={i} tileDistance={tileDistance} coords={{ latitude: userDataArray[i].geo.latitude, longitude: userDataArray[i].geo.longitude }} />
         }
-
-
     }
-    return (
-        <View style={styles.container}>
-            <AddTile />
-            <MapView
-                ref={mapRef}
-                style={styles.map}
-                customMapStyle={mapStyle}
-                initialRegion={{
-                    latitude: 40.64422,
-                    longitude: -8.64071,
-                    latitudeDelta: 0.03,
-                    longitudeDelta: 0.03,
-                }}
-                showsUserLocation={true}
-                followsUserLocation={true}
-                showsMyLocationButton={true}
-                showsBuildings={true}
-                showsIndoorLevelPicker={true}
-            >
-                <Marker
-                    coordinate={{
+
+    setTimeout(() => {
+        setLoading(false) //this.props.navigation.navigate('Login')
+    }, 5000); 
+
+    if (loading != false) {
+        return (
+            <Loading />
+        )
+    } else {
+        return (
+            <View style={styles.container}>
+                <AddTile />
+                <MapView
+                    ref={mapRef}
+                    style={styles.map}
+                    customMapStyle={mapStyle}
+                    initialRegion={{
                         latitude: 40.64422,
                         longitude: -8.64071,
+                        latitudeDelta: 0.03,
+                        longitudeDelta: 0.03,
                     }}
-                    title={markerTitle}
-                    description="test description"
-                    image={require("../../../assets/imgs/tileicon.png")}
+                    showsUserLocation={true}
+                    followsUserLocation={true}
+                    showsMyLocationButton={true}
+                    showsBuildings={true}
+                    showsIndoorLevelPicker={true}
                 >
-                    <Callout tooltip onPress={(e) =>
-                        tileDetail(markerTitle)
 
-                    }>
-                        <View >
-                            <View style={callouts.bubble}>
-                                <Text style={callouts.title}>Old train station</Text>
-                                {/* <Text>A short description</Text> */}
-                                <Image
-                                    style={callouts.image}
-                                    source={require('../../../assets/imgs/places/station.jpg')}
-                                />
-                            </View>
-                            <View style={callouts.arrowBorder} />
-                            <View style={callouts.arrow} />
-                        </View>
-                    </Callout>
-                </Marker>
-                <KnownTile />
-                {/*<CustomMarker tileDistance={tileDistance} coords={{ latitude: 40.64114, longitude: -8.65403 }} />*/}
-                {/*<CustomMarker tileDistance={tileDistance} coords={{ latitude: 40.63843, longitude: -8.65129 }} />*/}
-                {/*<CustomMarker tileDistance={tileDistance} coords={{ geoo }} />*/}
-                {/*markerjsx*/}
+                    <KnownTile />
+                    {/*<CustomMarker tileDistance={tileDistance} coords={{ latitude: 40.64114, longitude: -8.65403 }} />*/}
+                    {/*<CustomMarker tileDistance={tileDistance} coords={{ latitude: 40.63843, longitude: -8.65129 }} />*/}
+                    {/*<CustomMarker tileDistance={tileDistance} coords={{ geoo }} />*/}
+                    {/*markerjsx*/}
 
-                {loca}
+                    {loca}
 
 
-            </MapView>
+                </MapView>
 
 
-        </View>
-    );
+            </View>
+        );
+
+    }
+
+
 }
 /* <CustomMarker tileDistance={tileDistance} coords={{ latitude: 40.64082, longitude: -8.65375 }} */ //este ta fora por ser demasiado proximo de um deles (faz confusão), mas eventualmente será reposto
 const styles = StyleSheet.create({
@@ -334,10 +324,13 @@ const styles = StyleSheet.create({
         backgroundColor: "#151F6D",
         alignItems: "center",
         justifyContent: "center",
+        width: Dimensions.get("window").width,
+        height: Dimensions.get("window").height
+
     },
     map: {
         width: Dimensions.get("window").width,
-        height: Dimensions.get("window").height + 10,
+        height: Dimensions.get("window").height,
         top: 20
     },
 });
