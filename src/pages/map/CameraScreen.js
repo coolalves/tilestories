@@ -1,5 +1,5 @@
 import * as React from "react";
-import { StyleSheet, Text, View, SafeAreaView, Button, Image, useWindowDimensions, Dimensions } from "react-native";
+import { StyleSheet, Text, View, SafeAreaView, Button, Image, useWindowDimensions, Dimensions, Platform } from "react-native";
 import { useState, useEffect, useRef } from "react";
 import { Camera } from "expo-camera";
 import * as MediaLibrary from 'expo-media-library'
@@ -10,6 +10,7 @@ import { getStorage, ref, uploadBytes, } from 'firebase/storage';
 import { doc, setDoc, getDoc, updateDoc } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
 import { initializeApp } from "firebase/app";
+
 
 
 
@@ -35,6 +36,15 @@ export default function CameraScreen(location) {
     const [hasCameraPermission, setHasCameraPermission] = useState();
     const [hasMediaLibraryPermission, setHasMediaLibraryPermission] = useState();
     const [photo, setPhoto] = useState()
+    const [camera, setCamera] = useState(null);
+    // Screen Ratio and image padding
+    const [imagePadding, setImagePadding] = useState(0);
+    const [ratio, setRatio] = useState('4:3');  // default is 4:3
+    const { height, width } = Dimensions.get('window');
+    const screenRatio = height / width;
+    const [isRatioSet, setIsRatioSet] = useState(false);
+
+
 
 
     useEffect(() => {
@@ -47,11 +57,62 @@ export default function CameraScreen(location) {
     }, []);
 
 
-    if (hasCameraPermission === undefined) {
+    if (hasCameraPermission === undefined || hasCameraPermission === null) {
         return <Text> Requesting permissions...</Text>
     } else if (!hasCameraPermission) {
         return <Text> Permissions for camera not granted. Please change this in settings.</Text>
     }
+
+    // set the camera ratio and padding.
+    // this code assumes a portrait mode screen
+    const prepareRatio = async () => {
+        let desiredRatio = '4:3';  // Start with the system default
+        // This issue only affects Android
+        if (Platform.OS === 'android') {
+            const ratios = await camera.getSupportedRatiosAsync();
+
+            // Calculate the width/height of each of the supported camera ratios
+            // These width/height are measured in landscape mode
+            // find the ratio that is closest to the screen ratio without going over
+            let distances = {};
+            let realRatios = {};
+            let minDistance = null;
+            for (const ratio of ratios) {
+                const parts = ratio.split(':');
+                const realRatio = parseInt(parts[0]) / parseInt(parts[1]);
+                realRatios[ratio] = realRatio;
+                // ratio can't be taller than screen, so we don't want an abs()
+                const distance = screenRatio - realRatio;
+                distances[ratio] = realRatio;
+                if (minDistance == null) {
+                    minDistance = ratio;
+                } else {
+                    if (distance >= 0 && distance < distances[minDistance]) {
+                        minDistance = ratio;
+                    }
+                }
+            }
+            // set the best match
+            desiredRatio = minDistance;
+            //  calculate the difference between the camera width and the screen height
+            const remainder = Math.floor(
+                (height - realRatios[desiredRatio] * width) / 2
+            );
+            // set the preview padding and preview ratio
+            setImagePadding(remainder);
+            setRatio(desiredRatio);
+            // Set a flag so we don't do this 
+            // calculation each time the screen refreshes
+            setIsRatioSet(true);
+        }
+    };
+
+    // the camera must be loaded in order to access the supported ratios
+    const setCameraReady = async () => {
+        if (!isRatioSet) {
+            await prepareRatio();
+        }
+    };
 
     let takePhoto = async () => {
         let options = {
@@ -100,15 +161,28 @@ export default function CameraScreen(location) {
     }
 
     return (
-        <Camera style={[styles.cameraContainer]} ref={cameraRef}>
-
-            <View style={styles.buttonContainer}>
-                <Pressable   onPress={takePhoto} />
-                <Text style={styles.buttonText}> Take Photo</Text>
-            </View>
+        <View style={styles.container}>
 
 
-        </Camera>
+            <Camera
+                style={[styles.cameraPreview, { marginTop: imagePadding, marginBottom: imagePadding }]}
+                onCameraReady={setCameraReady}
+                ratio={ratio}
+                ref={(ref) => {
+                    setCamera(ref);
+                }}>
+                <View style={styles.buttonContainer}>
+                    <Pressable onPress={takePhoto} />
+                    <Text style={styles.buttonText}> Take Photo</Text>
+                </View>
+
+            </Camera>
+
+
+
+
+
+        </View>
 
     );
 }
@@ -119,6 +193,20 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: "center",
         justifyContent: "center",
+    },
+    information: {
+        flex: 1,
+        justifyContent: 'center',
+        alignContent: 'center',
+        alignItems: 'center',
+    },
+    container: {
+        flex: 1,
+        backgroundColor: '#000',
+        justifyContent: 'center'
+    },
+    cameraPreview: {
+        flex: 1,
     },
 
     buttonContainer: {
