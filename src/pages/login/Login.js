@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, Text, KeyboardAvoidingView, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { View, Text, KeyboardAvoidingView, TextInput, TouchableOpacity, StyleSheet, Image, Alert } from 'react-native';
 import { initializeApp } from "firebase/app";
 import firebaseConfig from "../../../firebase-config";
 import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } from "firebase/auth";
@@ -73,6 +73,8 @@ const Login = ({ navigation: { navigate } }) => {
 
     }
 
+
+
     const handleSignIn = () => {
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
@@ -84,6 +86,7 @@ const Login = ({ navigation: { navigate } }) => {
             })
             .catch(error => {
                 console.log(error);
+                Alert.alert(("Invalid email or password. Please try again"))
             })
     }
 
