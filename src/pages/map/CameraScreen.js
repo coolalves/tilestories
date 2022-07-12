@@ -1,9 +1,10 @@
 import * as React from "react";
-import { StyleSheet, Text, View, SafeAreaView, Button, Image, useWindowDimensions, Dimensions } from "react-native";
+
+import { StyleSheet, Text, View, SafeAreaView, Button, Image, useWindowDimensions, Dimensions, TextInput } from "react-native";
 import { useState, useEffect, useRef } from "react";
 import { Camera } from "expo-camera";
 import * as MediaLibrary from 'expo-media-library'
-
+import { Picker } from '@react-native-picker/picker';
 import { shareAsync } from "expo-sharing";
 import Pressable from "react-native/Libraries/Components/Pressable/Pressable";
 import { getStorage, ref, uploadBytes, } from 'firebase/storage';
@@ -16,6 +17,7 @@ import { Entypo } from '@expo/vector-icons';
 
 import { onAuthStateChanged } from "firebase/auth";
 import { getAuth } from "firebase/auth";
+
 
 var idazulii;
 const firebaseConfig = {
@@ -45,8 +47,10 @@ export default function CameraScreen(location) {
     let cameraRef = useRef();
     const [hasCameraPermission, setHasCameraPermission] = useState();
     const [hasMediaLibraryPermission, setHasMediaLibraryPermission] = useState();
-    const [photo, setPhoto] = useState()
+    const [photo, setPhoto] = useState();
+    const [selectedValue, setSelectedValue] = useState("preserved");
     const navigation = useNavigation();
+    const [description, setDescription] = useState("")
 
     onAuthStateChanged(auth, (user) => {
         if (user) {
@@ -102,6 +106,7 @@ export default function CameraScreen(location) {
             await uploadBytes(refi, bytes); //upload images to users
             await uploadBytes(refi2, bytes); //upload images to toApprove
 
+
         }
 
 
@@ -115,10 +120,46 @@ export default function CameraScreen(location) {
         return (
             <SafeAreaView style={styles.cameraContainer}>
                 <Image style={[styles.preview, styles.photoo]} source={{ uri: "data:image/jpg;base64," + photo.base64 }} />
-                <View style={{ top: -170, width: Dimensions.get("window").width, height: 0, alignContent: "center" }}>
+                <View style={{ top: -140, width: Dimensions.get("window").width, height: 0, alignContent: "center" }}>
                     <Pressable style={styles.buttonContainer2} onPress={sharePhoto} >
                         <Text style={styles.buttonText}> Share</Text>
                     </ Pressable>
+
+
+                    <View style={{ top: 30 }}>
+                        <View style={{ top: -200 }}>
+                            <View style={[styles.tileState]}>
+                                <Text style={{ textAlign: "center", fontWeight: "bold", fontSize: 18 }}>
+                                    Description
+                                </Text>
+                                <TextInput
+                                    placeholder="Write something..."
+                                    autoCorrect={false}
+                                    onChangeText={(text) => setDescription(text)}
+                                />
+                            </View>
+                        </View>
+
+                        <View style={{ top: -100 }}>
+                            <View style={[styles.tileState]}>
+                                <Text style={{ textAlign: "center", fontWeight: "bold", fontSize: 18 }}>
+                                    Status
+                                </Text>
+                                <Picker
+                                    selectedValue={selectedValue}
+                                    style={{ height: 50, width: 175, justifyContent: "center" }}
+                                    onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
+                                >
+                                    <Picker.Item label="Well Preserved" value="preserved" />
+                                    <Picker.Item label="Endangered" value="endangered" />
+                                    <Picker.Item label="Damaged" value="damaged" />
+                                    <Picker.Item label="Heavily Damaged" value="heavilyDamaged" />
+                                </Picker>
+                            </View>
+                        </View>
+                    </View>
+
+
                 </View>
 
 
@@ -135,6 +176,8 @@ export default function CameraScreen(location) {
                     </View>
 
                     : undefined}
+
+
 
                 <View style={{ top: -130, width: Dimensions.get("window").width, alignContent: "center" }}>
                     <Pressable style={styles.buttonContainer3} onPress={() => setPhoto(undefined)} >
@@ -199,6 +242,18 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         width: "80%",
         left: "-15%"
+    },
+    tileState: {
+        position: "absolute",
+        flex: 1,
+        bottom: "10%",
+        padding: 10,
+        zIndex: 2,
+        backgroundColor: "#FFFBFA",
+        borderRadius: 20,
+        width: "50%",
+        left: "0%",
+
     },
     buttonContainer3: {
         position: "absolute",
