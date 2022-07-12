@@ -14,7 +14,7 @@ import UnknownTile from "../../components/UnknownTile.js";
 
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import firebaseConfig from "../../../firebase-config";
-import { doc, setDoc, getDoc, collection, getDocs } from "firebase/firestore";
+import { doc, setDoc, getDoc, collection, getDocs, query } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
 import { initializeApp } from "firebase/app";
 import { Button } from "react-native-web";
@@ -27,6 +27,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth();
 var loca = [];
+var idazul = [];
 
 
 export default function Map({ navigation: { navigate } }) {
@@ -48,23 +49,49 @@ export default function Map({ navigation: { navigate } }) {
     const [tileDoc, setTileDoc] = useState({});
     const [geoo, setGeoo] = useState(undefined);
     const [userDataArray, setUserDataArray] = useState([]);
+    const [azulcollection, setAzulcollection] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [uid, setuid] = useState(null);
+
+    const chamauid = async () => {
+        await onAuthStateChanged(auth, (user) => {
+            if (user) {
+                setuid(user.uid);
+                pullinfo2(user.uid);
+
+            } else {
+                // User is signed out
+            }
+        });
+
+    }
+
+    const pullinfo2 = async (uid) => {
+        console.log("meu dasdadasd", uid);
+        const myazulejo = query(collection(db, "users", "1zKntAPZNhS1pHGRbZyGRJ78AlM2", "azulejo"))
+
+        //const workQ = query(collection(db, `users/${elem.id}/workInfo`))
+        const azuliiii = await getDocs(myazulejo)
+        const workInfo = azuliiii.docs.map((doc) => ({
+            ...doc.data(), id: doc.id
+        }))
+        setAzulcollection(workInfo);
 
 
-    onAuthStateChanged(auth, (user) => {
-        if (user) {
-            const uid = user.uid;
-
-        } else {
-            // User is signed out
+        console.log("estes são os meus azulejosssss", azulcollection[0]);
+        const descobertos = azulcollection.length;
+        if (descobertos > 0) {
+            for (let i = 0; i < descobertos; i++) {
+                idazul[i] = azulcollection[i].id;
+            }
+            console.log("id's dos azulejos", idazul);
+            //geodescoberto(idazul);
         }
-    });
+    }
 
+    const pullinfo = async () => {
 
-    const myDoc = collection(db, "azulejo")
-
-    function pullinfo() {
-        getDocs(collection(db, "azulejo"))
+        await getDocs(collection(db, "azulejo"))
             .then((querySnapshot) => {
 
 
@@ -82,6 +109,10 @@ export default function Map({ navigation: { navigate } }) {
 
 
     }
+
+    // const myDoc = collection(db, "azulejo")
+
+
 
 
 
@@ -123,6 +154,7 @@ export default function Map({ navigation: { navigate } }) {
 
     useEffect(() => {
         (async () => {
+            chamauid();
             await pullinfo();
         })();
     }, []);
@@ -172,7 +204,7 @@ export default function Map({ navigation: { navigate } }) {
         ])
     }
 
-    const passLocationToCamera = async () => {
+    const passLocationToCamera = async (manitos) => {
         let { status } = await Location.requestForegroundPermissionsAsync();
         try {
             if (status !== 'granted') {
@@ -186,12 +218,13 @@ export default function Map({ navigation: { navigate } }) {
             console.log(error);
         }
         //console.log(location);
-        navigate('Camera', { location });
+        navigate('Camera', { location, manitos });
     } //vai buscar a ultima localização conhecida do utilizador para passar via props para o componente da camara e posteriormente abre a camera
 
     //console.log(location)
 
-    const tileDistance = async (coordinates) => {
+
+    const tileDistance = async (coordinates, manitos) => {
         console.log("cords la dentro", coordinates);
         let location = await Location.getLastKnownPositionAsync();
         console.log("localização", location);
@@ -203,11 +236,11 @@ export default function Map({ navigation: { navigate } }) {
             { latitude: coordinates.latitude, longitude: coordinates.longitude }
         );
 
-        // let distanceInKM = (distance / 1000 + "km")
+
         console.log("mono", distance);
         setDistanceToTile(distance)
         if (distance < 50) {
-            passLocationToCamera()
+            passLocationToCamera(manitos)
         } else {
             farFromTile()
         }
@@ -264,14 +297,23 @@ export default function Map({ navigation: { navigate } }) {
     if (userDataArray.length == 0) {
         console.log("loading...");
     } else {
+
+        let newarray = [];
+        idazul.map(elem => newarray.push(parseInt(elem)))
         for (let i = 0; i < userDataArray.length; i++) {
-            loca[i] = <UnknownTile key={i} tileDistance={tileDistance} coords={{ latitude: userDataArray[i].geo.latitude, longitude: userDataArray[i].geo.longitude }} />
+
+            if (newarray.includes(i)) {
+                console.log("estou aqusi", userDataArray[i].geo.latitude)
+                loca[i] = <KnownTile key={i} coords={{ latitude: userDataArray[i].geo.latitude, longitude: userDataArray[i].geo.longitude }}></KnownTile>
+            } else {
+                loca[i] = <UnknownTile key={i} id={userDataArray[i].id} tileDistance={tileDistance} coords={{ latitude: userDataArray[i].geo.latitude, longitude: userDataArray[i].geo.longitude }} />
+            }
         }
     }
 
     setTimeout(() => {
         setLoading(false) //this.props.navigation.navigate('Login')
-    }, 5500); 
+    }, 6000);
 
     if (loading != false) {
         return (
@@ -298,7 +340,7 @@ export default function Map({ navigation: { navigate } }) {
                     showsIndoorLevelPicker={true}
                 >
 
-                    <KnownTile />
+                    {/*<KnownTile />*/}
                     {/*<CustomMarker tileDistance={tileDistance} coords={{ latitude: 40.64114, longitude: -8.65403 }} />*/}
                     {/*<CustomMarker tileDistance={tileDistance} coords={{ latitude: 40.63843, longitude: -8.65129 }} />*/}
                     {/*<CustomMarker tileDistance={tileDistance} coords={{ geoo }} />*/}
