@@ -10,7 +10,7 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { initializeApp } from "firebase/app";
 import firebaseConfig from "../../../firebase-config";
 import { doc, getDoc, getFirestore } from "firebase/firestore";
-import { PersonalGallery } from '../../components/PersonalGallery';
+ 
 import Pressable from 'react-native/Libraries/Components/Pressable/Pressable';
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);

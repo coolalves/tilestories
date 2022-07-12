@@ -97,7 +97,13 @@ const Login = ({ navigation: { navigate } }) => {
         <KeyboardAvoidingView
             style={styles.container}
         >
+            <View>
+                <Image
+                    source={require('../../../assets/logo.png')}
+                    style={styles.fotinha}
 
+                ></Image>
+            </View>
 
             <View style={styles.inputContainer}>
                 <TextInput
@@ -123,7 +129,7 @@ const Login = ({ navigation: { navigate } }) => {
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                    onPress={handleCreateAccount}
+                    onPress={() => navigate('Signup')}
                     style={[styles.button, styles.buttonOutline]}>
                     <Text>Register</Text>
                 </TouchableOpacity>

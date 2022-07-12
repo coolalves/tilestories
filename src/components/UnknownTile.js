@@ -26,7 +26,7 @@ const KnownTile = (props) => {
                     <View style={styles.centeredView}>
                         <View style={styles.modalView}>
                             <View style={styles.tileImgView}>
-                                <Image style={styles.tileImg} source={require('../../assets/imgs/newtileicon.png')} />
+                                <Image style={styles.tileImg} source={require('../../assets/imgs/newtileiconbig.png')} />
                             </View>
                             <Text style={styles.modalText}>Unknown Tile</Text>
                             <Text style={styles.modalText2}>Never Visited</Text>

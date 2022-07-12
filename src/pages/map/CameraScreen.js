@@ -149,7 +149,7 @@ export default function CameraScreen(location) {
     return (
         <Camera style={[styles.cameraContainer]} ref={cameraRef}>
 
-            <View style={{ top: 80, width: 300, height: 600, alignContent: "center" }}>
+            <View style={{ top: 80, width: 315, height: 600, alignContent: "center" }}>
                 <Pressable style={styles.buttonContainer} onPress={takePhoto}>
                     <Text style={styles.buttonText}> Take Photo</Text>
                 </Pressable>

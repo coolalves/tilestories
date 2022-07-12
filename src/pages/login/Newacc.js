@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, KeyboardAvoidingView, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { View, Text, KeyboardAvoidingView, TextInput, TouchableOpacity, StyleSheet, Image, Alert } from 'react-native';
 import { initializeApp } from "firebase/app";
 import firebaseConfig from "../../../firebase-config";
 import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } from "firebase/auth";
@@ -47,12 +47,14 @@ const Login = ({ navigation: { navigate } }) => {
                     .catch((error) => {
                         // MARK: Failure
                         alert(error.message)
+
                     })
 
 
             })
             .catch(error => {
                 console.log(error);
+                Alert.alert(("Your password must be 6 characters long!"))
             })
 
         //passar para a base de dados
@@ -71,7 +73,13 @@ const Login = ({ navigation: { navigate } }) => {
         <KeyboardAvoidingView
             style={styles.container}
         >
+            <View>
+                <Image
+                    source={require('../../../assets/logo.png')}
+                    style={styles.fotinha}
 
+                ></Image>
+            </View>
 
             <View style={styles.inputContainer}>
                 <TextInput
@@ -100,6 +108,11 @@ const Login = ({ navigation: { navigate } }) => {
                     style={[styles.buttonText, styles.buttonOutlinelog]}
                 >
                     <Text style={styles.textbranco}>Register</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() => navigate('Login')}
+                    style={[styles.button, styles.buttonOutline]}>
+                    <Text>Login</Text>
                 </TouchableOpacity>
             </View>
 
@@ -163,8 +176,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#5C75DD',
         marginTop: 5,
         marginBottom: 8,
-         
-         
+
+
 
     },
     buttonText: {

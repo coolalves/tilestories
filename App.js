@@ -51,6 +51,8 @@ const authContext = useMemo(() => {
 }, [])*/
 
 const AuthStackNavigator = () => {
+
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <AuthStack.Navigator initialRouteName="LandingPage">
@@ -95,7 +97,7 @@ function TabRoutes() {
     });*/
 
   let selectedIconColor = "#5C75DD";
-  let iconColor = "white";
+  let iconColor = "#FFFBFA";
 
   return (
 
@@ -134,7 +136,7 @@ function TabRoutes() {
           backgroundColor: '#5C75DD',
 
         },
-        headerTintColor: 'white',
+        headerTintColor: '#FFFBFA',
         headerTitleStyle: {
           fontWeight: 'bold',
           // fontFamily: 'NotoSans'
@@ -145,7 +147,7 @@ function TabRoutes() {
         options={{
           tabBarLabel: 'Scoreboard', tabBarActiveTintColor: '#F5BB38',
           tabBarIcon: ({ size, color }) => (
-            <MaterialCommunityIcons name="medal" size={28} tab color="white" />
+            <MaterialCommunityIcons name="medal" size={28} tab color="#FFFBFA" />
           )
         }}
       />
@@ -161,7 +163,7 @@ function TabRoutes() {
         options={{
           tabBarLabel: 'Profile', tabBarActiveTintColor: '#F5BB38',
           tabBarIcon: ({ size, color }) => (
-            <MaterialCommunityIcons name="account" size={28} color="white" />
+            <MaterialCommunityIcons name="account" size={28} color="#FFFBFA" />
           )
         }}
       />

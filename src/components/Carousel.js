@@ -41,7 +41,7 @@ function Carousel() {
     return (
         <FlatList
             data={slideList}
-            style={{ flex: 1 }}
+            style={{ flex: 1, backgroundColor:"#5C75DD" }}
             renderItem={({ item }) => {
                 return <Slide data={item} />;
             }}
