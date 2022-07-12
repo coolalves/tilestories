@@ -223,7 +223,7 @@ const styles = StyleSheet.create({
     top: 70,
     padding:40,
     textAlign: "center",
-    color: "black"
+    color: "#111111"
   },
   userContainer: {
     backgroundColor: "transparent",
@@ -280,7 +280,7 @@ const styles = StyleSheet.create({
     top: 70,
     fontSize: 20,
     fontWeight: "bold",
-    color: "black"
+    color: "#111111"
 
   },
 
@@ -291,7 +291,7 @@ const styles = StyleSheet.create({
     top: 100,
     fontSize: 14,
     fontWeight: "400",
-    color: "black"
+    color: "#111111"
   },
 
   rankingContainer: {
@@ -349,7 +349,7 @@ const styles = StyleSheet.create({
 
   name: {
     fontSize: 22,
-    color: "#000",
+    color: "#111111",
     fontWeight: "600",
     textAlign: 'center'
   },

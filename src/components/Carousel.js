@@ -10,8 +10,8 @@ const slideList = Array.from({ length: 30 }).map((_, i) => {
     return {
         id: i,
         image: `https://picsum.photos/1440/2842?random=${i}`,
-        title: `This is the title! ${i + 1}`,
-        subtitle: `This is the subtitle ${i + 1}!`,
+        title: `Tile Name ${i + 1}`,
+        subtitle: `Discovered/added: Jul 2022 ${i + 1}!`,
     };
 });
 
@@ -29,23 +29,34 @@ function Slide({ data }) {
         >
             <Image
                 source={{ uri: data.image }}
-                style={{ width: windowWidth * 0.9, height: windowHeight * 0.9 }}
+                style={{ width: windowWidth * 0.9, height: windowHeight * 0.9 - 100, borderRadius: 10 }}
             ></Image>
-            <Text style={{ fontSize: 24 }}>{data.title}</Text>
-            <Text style={{ fontSize: 18 }}>{data.subtitle}</Text>
+            <Text style={{ fontSize: 20, color: '#FFFBFA', fontWeight: "bold", padding: 12 }}>{data.title}</Text>
+            <Text style={{ fontSize: 15, color: '#FFFBFA' }}>{data.subtitle}</Text>
+
         </View>
     );
 }
 
 function Carousel() {
     return (
-        <FlatList
-            data={slideList}
-            style={{ flex: 1, backgroundColor:"#5C75DD" }}
-            renderItem={({ item }) => {
-                return <Slide data={item} />;
-            }}
-        />
+        <>
+
+
+
+            <FlatList
+                data={slideList}
+                style={{ flex: 1, backgroundColor: "#5C75DD" }}
+                renderItem={({ item }) => {
+                    return <Slide data={item} />;
+                }}
+            >
+
+            </FlatList>
+
+
+
+        </>
     );
 };
 
