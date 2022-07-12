@@ -10,21 +10,20 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { initializeApp } from "firebase/app";
 import firebaseConfig from "../../../firebase-config";
 import { doc, getDoc, getFirestore } from "firebase/firestore";
-import { PersonalGallery } from '../../components/PersonalGallery';
-import Carousel from '../../components/Carousel';
+import { SimpleLineIcons } from '@expo/vector-icons';
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth();
 
 
 
-export default function Profile() {
+export default function Profile({ navigation: { navigate } }) {
 
   const [userDoc, setUserDoc] = useState(null)
   //const [useruid, setUserUid] = useState(undefined)
   const [useremail, setUserEmail] = useState(null)
   const [userName, setUserName] = useState(null)
-  const [gallery, setGallery] = useState(false)
+
   const useruid = "4to1jIMqQAYtyBZHZFYzlF9gvIP2";
   var nomi;
   var email;
@@ -94,13 +93,19 @@ export default function Profile() {
 
 
 
-  if (gallery == true) {
-    return (<Carousel />)
-  }
+
   return (
 
     <View  >
-      <View style={styles.header}></View>
+
+      <View style={styles.header}>
+        <View style={{ position: 'absolute', top:60, left:23, flexDirection: "row"}}>
+          <SimpleLineIcons name="logout" size={20} color="white" />
+          <Text style={{color:'white', left:12}}>
+            Logout
+          </Text>
+        </View>
+      </View>
       <View style={{ padding: 40, alignContent: "center" }}>
         <View style={{ backgroundColor: "transparent", top: 100, alignContent: "center" }}>
           <View >
@@ -114,9 +119,9 @@ export default function Profile() {
                 Member since july 2022
               </Text>
 
-              <View style={{ alignContent:"center", top:470 }}>
-                <Pressable style={{height:40, backgroundColor:"#5C75DD", borderRadius:20, width:350, left:-18}} onPress={()=> setGallery(true)}>
-                  <Text style={{ textAlign: "center", fontSize: 16,   color: "white", fontWeight:"bold", top:7 }} >
+              <View style={{ alignContent: "center", top: 470 }}>
+                <Pressable style={{ height: 40, backgroundColor: "#5C75DD", borderRadius: 20, width: 350, left: -18 }} onPress={() => navigate('Gallery')}>
+                  <Text style={{ textAlign: "center", fontSize: 16, color: "white", fontWeight: "bold", top: 7 }} >
                     Discovered Tiles
                   </Text>
                 </Pressable>

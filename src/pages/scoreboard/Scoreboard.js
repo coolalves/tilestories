@@ -112,31 +112,31 @@ export default function Scoreboard() {
                 Username
               </Text>
               <Text style={styles.points}>
-                160 points
+                140 points
               </Text>
               <View style={styles.rankingContainer}>
                 <View style={styles.ranking}>
                   <Text style={{ textAlign: "center", fontSize: 16, fontWeight: "bold", color: "white" }} >
-                    1
+                    2
                   </Text>
                 </View>
               </View>
             </View>
           </View>
 
-          <View style={styles.userContainer}>
+          <View style={styles.userContainerFirst}>
             <Image style={styles.avatar} source={{ uri: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png' }} />
             <View style={styles.textContainer}>
               <Text style={styles.username}>
                 Username
               </Text>
               <Text style={styles.points}>
-                130 points
+                180 points
               </Text>
               <View style={styles.rankingContainer}>
                 <View style={styles.ranking}>
                   <Text style={{ textAlign: "center", fontSize: 16, fontWeight: "bold", color: "white" }} >
-                    2
+                    1
                   </Text>
                 </View>
               </View>
@@ -231,6 +231,13 @@ const styles = StyleSheet.create({
     height: 200,
     borderRadius: 10
   },
+  userContainerFirst: {
+    backgroundColor: "transparent",
+    width: Dimensions.get("window").width / 3,
+    height: 200,
+    borderRadius: 10,
+    top:23
+  },
   avatar: {
     width: 100,
     height: 100,
@@ -291,7 +298,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     position: 'absolute',
     textAlign: "center",
-    top: 130,
+    top: 140,
     fontSize: 14,
     fontWeight: "400",
 
@@ -313,8 +320,8 @@ const styles = StyleSheet.create({
   ranking: {
     alignContent: "center",
     backgroundColor: '#F5BB38',
-    width: 25,
-    height: 25,
+    width: 20,
+    height: 20,
     borderRadius: 100,
 
   },
