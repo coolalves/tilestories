@@ -108,8 +108,9 @@ function TabRoutes() {
         tabBarLabelStyle: {
           position: "absolute",
           padding: 6,
-          fontWeight:"600",
-          fontSize:11
+          fontWeight: "600",
+          fontSize: 11,
+
         },
         tabBarIconStyle: {
           padding: 7
@@ -123,8 +124,7 @@ function TabRoutes() {
           position: "absolute",
         },
 
-        activeTintColor: 'white',
-        inactiveTintColor: 'grey',
+
         tabStyle: {
           paddingBottom: 5,
           paddingTop: 5,
@@ -132,7 +132,7 @@ function TabRoutes() {
         title: "tilestories",
         headerStyle: {
           backgroundColor: '#5C75DD',
-          borderEndColor: 'red',
+
         },
         headerTintColor: 'white',
         headerTitleStyle: {
@@ -143,7 +143,7 @@ function TabRoutes() {
     >
       <Tab.Screen name="Scoreboard" component={Scoreboard}
         options={{
-          tabBarLabel: 'Scoreboard',
+          tabBarLabel: 'Scoreboard', tabBarActiveTintColor: '#F5BB38',
           tabBarIcon: ({ size, color }) => (
             <MaterialCommunityIcons name="medal" size={28} tab color="white" />
           )
@@ -151,7 +151,7 @@ function TabRoutes() {
       />
       <Tab.Screen name="Home" component={MapStackNavigator}
         options={{
-          tabBarLabel: '',
+          tabBarLabel: 'Map', tabBarActiveTintColor: '#F5BB38',
           tabBarIcon: ({ size, color }) => (
             <HomeButton size={28} color={color} />
           )
@@ -159,7 +159,7 @@ function TabRoutes() {
       />
       <Tab.Screen name="Profile" component={ProfileStack}
         options={{
-          tabBarLabel: 'Profile',
+          tabBarLabel: 'Profile', tabBarActiveTintColor: '#F5BB38',
           tabBarIcon: ({ size, color }) => (
             <MaterialCommunityIcons name="account" size={28} color="white" />
           )
