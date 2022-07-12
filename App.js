@@ -102,15 +102,27 @@ function TabRoutes() {
     <Tab.Navigator
       initialRouteName="Home"
       screenOptions={{
+
         headerShown: false,
+        tabBarLabelPosition: "below-icon",
+        tabBarLabelStyle: {
+          position: "absolute",
+          padding: 6,
+          fontWeight:"600",
+          fontSize:11
+        },
+        tabBarIconStyle: {
+          padding: 7
+        },
         tabBarStyle: {
           backgroundColor: '#151F6D',
           borderTopColor: 'transparent',
           height: 60,
           borderTopLeftRadius: 15,
           borderTopRightRadius: 15,
-          position: "absolute"
+          position: "absolute",
         },
+
         activeTintColor: 'white',
         inactiveTintColor: 'grey',
         tabStyle: {
@@ -131,7 +143,7 @@ function TabRoutes() {
     >
       <Tab.Screen name="Scoreboard" component={Scoreboard}
         options={{
-          tabBarLabel: '',
+          tabBarLabel: 'Scoreboard',
           tabBarIcon: ({ size, color }) => (
             <MaterialCommunityIcons name="medal" size={28} tab color="white" />
           )
@@ -147,7 +159,7 @@ function TabRoutes() {
       />
       <Tab.Screen name="Profile" component={ProfileStack}
         options={{
-          tabBarLabel: '',
+          tabBarLabel: 'Profile',
           tabBarIcon: ({ size, color }) => (
             <MaterialCommunityIcons name="account" size={28} color="white" />
           )
