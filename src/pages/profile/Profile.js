@@ -11,6 +11,7 @@ import { initializeApp } from "firebase/app";
 import firebaseConfig from "../../../firebase-config";
 import { doc, getDoc, getFirestore } from "firebase/firestore";
 import { PersonalGallery } from '../../components/PersonalGallery';
+import Carousel from '../../components/Carousel';
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth();
@@ -23,6 +24,7 @@ export default function Profile() {
   //const [useruid, setUserUid] = useState(undefined)
   const [useremail, setUserEmail] = useState(null)
   const [userName, setUserName] = useState(null)
+  const [gallery, setGallery] = useState(false)
   const useruid = "4to1jIMqQAYtyBZHZFYzlF9gvIP2";
   var nomi;
   var email;
@@ -92,8 +94,11 @@ export default function Profile() {
 
 
 
-
+  if (gallery == true) {
+    return (<Carousel />)
+  }
   return (
+
     <View  >
       <View style={styles.header}></View>
       <View style={{ padding: 40, alignContent: "center" }}>
@@ -104,19 +109,37 @@ export default function Profile() {
               <Text style={styles.myusername}>
                 Username
               </Text>
-              <Text style={styles.mypoints}>
-                160 points
-              </Text>
+
               <Text style={styles.since} >
                 Member since july 2022
               </Text>
-              <View style={styles.rewardsContainer}>
-                <PersonalGallery />
+
+              <View style={{ alignContent:"center", top:470 }}>
+                <Pressable style={{height:40, backgroundColor:"#5C75DD", borderRadius:20, width:350, left:-18}} onPress={()=> setGallery(true)}>
+                  <Text style={{ textAlign: "center", fontSize: 16,   color: "white", fontWeight:"bold", top:7 }} >
+                    Discovered Tiles
+                  </Text>
+                </Pressable>
+              </View>
+              <View style={styles.aboutUser}>
+                <Text style={styles.title2}>
+                  Progress
+                </Text>
+                <Text style={styles.title3}>
+                  160 points
+                </Text>
+                <Text style={styles.title3}>
+                  12 tiles discovered
+                </Text>
+                <Text style={styles.title3}>
+                  2 new tiles added
+                </Text>
               </View>
             </View>
           </View>
         </View>
       </View>
+
 
 
 
@@ -134,18 +157,33 @@ const styles = StyleSheet.create({
     position: "absolute"
   },
   title: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "bold",
     top: 70,
     textAlign: "center",
     color: "white"
+  },
+  title2: {
+    fontSize: 17,
+    fontWeight: "bold",
+    top: -70,
+    textAlign: "center",
+    color: "#111111"
+  },
+  title3: {
+    fontSize: 15,
+    fontWeight: "400",
+    top: -60,
+    textAlign: "center",
+    color: "#111111",
+    marginTop: 20
   },
   mytitle: {
     fontSize: 20,
     fontWeight: "bold",
     top: 70,
     textAlign: "center",
-    color: "black"
+    color: "#111111"
   },
   userContainer: {
     backgroundColor: "transparent",
@@ -195,7 +233,7 @@ const styles = StyleSheet.create({
     top: 70,
     fontSize: 20,
     fontWeight: "bold",
-    color: "black"
+    color: "#111111"
 
   },
 
@@ -206,7 +244,7 @@ const styles = StyleSheet.create({
     top: 100,
     fontSize: 14,
     fontWeight: "400",
-    color: "black"
+    color: "#111111"
   },
   since: {
     alignSelf: 'center',
@@ -215,7 +253,7 @@ const styles = StyleSheet.create({
     top: 130,
     fontSize: 14,
     fontWeight: "400",
-    color: "black"
+    color: "#111111"
   },
 
   rankingContainer: {
@@ -232,8 +270,10 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     position: 'absolute',
     textAlign: "center",
-    top: 150,
+    top: 400,
     fontSize: 14,
+    padding: 20
+
 
 
   },
@@ -272,7 +312,7 @@ const styles = StyleSheet.create({
 
   name: {
     fontSize: 22,
-    color: "#000",
+    color: "#111111",
     fontWeight: "600",
     textAlign: 'center'
   },
@@ -288,5 +328,14 @@ const styles = StyleSheet.create({
     marginTop: 0,
     textAlign: 'center'
   },
+  aboutUser: {
+    width: 350,
+    height: 240,
+    padding: 100,
+    backgroundColor: '#BECDF1',
+    borderRadius: 20,
+    top: 150,
+    left: -18
+  }
 
 });

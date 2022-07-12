@@ -1,7 +1,8 @@
 import * as React from "react";
-import { View, Pressable, StyleSheet , Text} from "react-native";
+import { View, Pressable, StyleSheet, Text } from "react-native";
 import { useState } from "react";
 import { ImageGallery } from '@georstat/react-native-image-gallery';
+import { Ionicons } from '@expo/vector-icons';
 
 
 const images = [
@@ -27,23 +28,44 @@ export const PersonalGallery = () => {
     const [isOpen, setIsOpen] = useState(false);
     const openGallery = () => setIsOpen(true);
     const closeGallery = () => setIsOpen(false);
+    const exitGallery = () => {
+        closeGallery(true)
+    }
 
     return (
-    
-       
 
-            <View style={styles.openBtnContainer}>
-                <Pressable
-                    style={[styles.button, styles.buttonOpenDetail]}
-                    onPress={ 
-                        openGallery
-                    }
-                >
-                    <Text style={styles.btnTextStyle}>My Tiles</Text>
-                </Pressable>
-                <ImageGallery close={closeGallery} isOpen={isOpen} images={images} />
-            </View>
-       
+
+
+        <View style={styles.openBtnContainer}>
+            <Pressable
+                style={[styles.button, styles.buttonOpenDetail]}
+                onPress={
+                    openGallery
+                }
+            >
+                <Text style={styles.btnTextStyle}>Tiles discovered</Text>
+            </Pressable>
+
+            <ImageGallery close={closeGallery} isOpen={isOpen} images={images} >
+
+                <View style={styles.closeBtnContainer}>
+                    <Pressable
+                        style={[styles.button, styles.buttonClose]}
+                        onPress={() => exitGallery()}
+                    >
+                        <Ionicons name="close-outline" size={18} color="white" />
+                    </Pressable>
+
+                    
+                </View>
+                <Text style={{color:"white", position:"absolute", fontSize:30, flex:1, zIndex:3}}>
+                        aaaaaaaaaaaa
+                    </Text>
+            </ImageGallery>
+
+
+        </View>
+
     )
 }
 
@@ -127,4 +149,3 @@ const styles = StyleSheet.create({
     }
 })
 
- 

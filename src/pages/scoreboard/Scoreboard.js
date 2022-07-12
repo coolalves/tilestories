@@ -175,7 +175,7 @@ export default function Scoreboard() {
         </Text>
         <View style={{ backgroundColor: "transparent", top: 100, alignContent:"center" }}>
 
-          <View >
+          <View  style={{top:-40}}>
             <Image style={styles.avatar} source={{ uri: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png' }} />
             <View style={styles.textContainer}>
               <Text style={styles.myusername}>
@@ -186,7 +186,7 @@ export default function Scoreboard() {
               </Text>
               <View style={styles.rewardsContainer}>
                 <Pressable style={styles.rewards}>
-                  <Text style={{ textAlign: "center", fontSize: 16,   color: "white" }} >
+                  <Text style={{ textAlign: "center", fontSize: 16,   color: "white", fontWeight:"bold" }} >
                     rewards
                   </Text>
                 </Pressable>
@@ -221,6 +221,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     top: 70,
+    padding:40,
     textAlign: "center",
     color: "black"
   },
@@ -301,9 +302,11 @@ const styles = StyleSheet.create({
     position: 'absolute',
     textAlign: "center",
     top: 150,
-    fontSize: 14,
-     
-
+    fontSize: 13,
+    padding: 10,
+    elevation: 2,
+    borderRadius: 100,
+    backgroundColor:"#F5BB38"
   },
   
 
@@ -317,10 +320,10 @@ const styles = StyleSheet.create({
   },
   rewards: {
     alignContent: "center",
-    backgroundColor: '#F5BB38',
+     
     width: 75,
     height: 25,
-    borderRadius: 100,
+    
 
   },
 
