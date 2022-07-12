@@ -18,6 +18,7 @@ import PageOne from "./src/pages/tutorial/PageOne";
 import PageTwo from "./src/pages/tutorial/PageTwo";
 import PageThree from "./src/pages/tutorial/PageThree";
 import PageFour from "./src/pages/tutorial/PageFour";
+import Carousel from "./src/components/Carousel";
 
 //import MapModal from "./components/MapModal"
 //import { AuthContext } from "./context";
@@ -72,6 +73,17 @@ const MapStackNavigator = () => {
         <MapStack.Screen name="Map" component={Map} options={{ headerShown: false }} />
         <MapStack.Screen name="Camera" component={CameraScreen} options={{ headerShown: false }} />
         <MapStack.Screen name="Tile" component={TileDetails} options={{ headerShown: false }} />
+      </MapStack.Navigator>
+    </GestureHandlerRootView>
+  );
+};
+
+const ProfileStack = () => {
+  return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <MapStack.Navigator initialRouteName="Profile">
+        <Tab.Screen name="Account" component={Profile} options={{ headerShown: false }} />
+        <Tab.Screen name="Gallery" component={Carousel} options={{ headerShown: false }} />
       </MapStack.Navigator>
     </GestureHandlerRootView>
   );
@@ -133,7 +145,7 @@ function TabRoutes() {
           )
         }}
       />
-      <Tab.Screen name="Account" component={Profile}
+      <Tab.Screen name="Profile" component={ProfileStack}
         options={{
           tabBarLabel: '',
           tabBarIcon: ({ size, color }) => (
