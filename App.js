@@ -18,8 +18,9 @@ import PageOne from "./src/pages/tutorial/PageOne";
 import PageTwo from "./src/pages/tutorial/PageTwo";
 import PageThree from "./src/pages/tutorial/PageThree";
 import PageFour from "./src/pages/tutorial/PageFour";
+import Congratulations from "./src/pages/map/Congratulations";
 import Carousel from "./src/components/Carousel";
-
+import KnownTileCamera from "./src/pages/map/KnownTileCamera"
 //import MapModal from "./components/MapModal"
 //import { AuthContext } from "./context";
 
@@ -74,7 +75,9 @@ const MapStackNavigator = () => {
       <MapStack.Navigator initialRouteName="Map">
         <MapStack.Screen name="Map" component={Map} options={{ headerShown: false }} />
         <MapStack.Screen name="Camera" component={CameraScreen} options={{ headerShown: false }} />
+        <MapStack.Screen name="KnownCamera" component={KnownTileCamera} options={{ headerShown: false }} />
         <MapStack.Screen name="Tile" component={TileDetails} options={{ headerShown: false }} />
+        <MapStack.Screen name="Congratulations" component={Congratulations} options={{ headerShown: false }} />
       </MapStack.Navigator>
     </GestureHandlerRootView>
   );
