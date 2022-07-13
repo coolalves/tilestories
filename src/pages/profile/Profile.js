@@ -6,7 +6,7 @@ import {
   Image,
   TouchableOpacity, Pressable, Dimensions
 } from 'react-native';
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { initializeApp } from "firebase/app";
 import firebaseConfig from "../../../firebase-config";
 import {collection, doc, getDoc, getDocs, getFirestore} from "firebase/firestore";
@@ -20,6 +20,7 @@ var email;
 var register;
 var points;
 var descobertos;
+var dia3
 
 export default function Profile({ navigation: { navigate } }) {
 
@@ -101,7 +102,7 @@ console.log("userdoc", userDoc);
 
 
   if (userDoc == null || userazul==undefined) {
-    console.log("loading")
+    console.log("loading.")
     chamauid();
     doIT2();
 
@@ -112,6 +113,23 @@ console.log("userdoc", userDoc);
     points= userDoc.points;
     descobertos= userazul.length -1;
 
+    console.log(register)
+    const dia= register.split(',');
+    console.log(dia[1])
+    const dia2= dia[1].split(':');
+    console.log(dia2[0])
+     dia3= dia2[0].slice(0, -2);
+    console.log(dia3);
+
+  }
+
+  const logout= () =>{
+    signOut(auth).then(() => {
+      navigate("LandingPage")
+      // Sign-out successful.
+    }).catch((error) => {
+      // An error happened.
+    });
   }
 
   return (
@@ -121,7 +139,7 @@ console.log("userdoc", userDoc);
       <View style={styles.header}>
         <View style={{ position: 'absolute', top:60, left:23, flexDirection: "row"}}>
           <SimpleLineIcons name="logout" size={20} color="white" />
-          <Text style={{color:'white', left:12}}>
+          <Text onPress={logout} style={{color:'white', left:12}}>
             Logout
           </Text>
         </View>
@@ -136,11 +154,11 @@ console.log("userdoc", userDoc);
               </Text>
 
               <Text style={styles.since} >
-                {register}
+                Discovering new tiles since: {dia3}
               </Text>
 
-              <View style={{ alignContent: "center", top: 470 }}>
-                <Pressable style={{ height: 40, backgroundColor: "#5C75DD", borderRadius: 20, width: 350, left: -18 }} onPress={() => navigate('Gallery')}>
+              <View style={{ textAlign: "center",alignSelf:'center' ,top: 470, marginHorizontal:'auto' }}>
+                <Pressable style={{ height: 40, backgroundColor: "#5C75DD", borderRadius: 20, width: 350 }} onPress={() => navigate('Gallery')}>
                   <Text style={{ textAlign: "center", fontSize: 16, color: "white", fontWeight: "bold", top: 7 }} >
                     Discovered Tiles
                   </Text>
@@ -354,13 +372,15 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   aboutUser: {
+    textAlign: 'center',
     width: 350,
     height: 240,
     padding: 100,
     backgroundColor: '#BECDF1',
     borderRadius: 20,
     top: 150,
-    left: -18
+    alignSelf:'center'
+
   }
 
 });

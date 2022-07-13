@@ -20,59 +20,6 @@ const Login = ({ navigation: { navigate } }) => {
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    const handleCreateAccount = () => {
-        createUserWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                console.log('Account Createddd!!');
-                user = userCredential.user;
-
-                const myDoc = doc(db, "users", user.uid)
-
-                // Your Document Goes Here
-                const docData = {
-                    "email": user.email,
-                    "name": "nomealia",
-                    "uid": user.uid,
-                    "resgisterDate": user.metadata.creationTime
-                }
-
-                setDoc(myDoc, docData)
-                    // Handling Promises
-                    .then(() => {
-                        // MARK: Success
-                        console.log('vai para o firebase!!');
-                    })
-                    .catch((error) => {
-                        // MARK: Failure
-                        alert(error.message)
-                    })
-
-                useEffect(() => {
-                    firebase.auth().onAuthStateChanged((user) => {
-                        if (user) {
-                            console.log('User email: ', user.email);
-                        }
-                    });
-                })
-
-
-            })
-            .catch(error => {
-                console.log(error);
-            })
-
-        //passar para a base de dados
-
-
-
-        // MARK: Creating New Doc in Firebase
-        // Before that enable Firebase in Firebase Console
-
-
-
-
-    }
-
 
 
     const handleSignIn = () => {

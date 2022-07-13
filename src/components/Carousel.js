@@ -116,8 +116,8 @@ function Carousel() {
                 imags[i]={
                     id: i,
                     image: x,
-                    //title: `Tile Name ${i + 1}`,
-                    //subtitle: `Discovered/added: Jul 2022 ${i + 1}!`,
+                    title: `Tile Name ${i + 1}`,
+                    subtitle: `Discovered/added: Jul 2022 ${i + 1}!`,
                 };
                 console.log("dadada",imags[i]);
             })
@@ -133,14 +133,19 @@ function Carousel() {
 
     console.log(useruid);
 
+    useEffect(() => {
+        (async () => {
+            await func2();
+        })();
+    }, []);
+
+
 
 
     console.log("estou aqui")
-    {console.log("estou no flatlist",imags)}
+    {console.log("estou no flatlis",imags)}
     return (
         <>
-
-
 
             <FlatList
 

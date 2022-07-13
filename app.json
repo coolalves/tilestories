@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "tilestoriescode",
+    "name": "tilestories",
     "slug": "tilestoriescode",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -31,6 +31,7 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "ua.tilestories",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#151F6D"
