@@ -21,6 +21,8 @@ import PageFour from "./src/pages/tutorial/PageFour";
 import Congratulations from "./src/pages/map/Congratulations";
 import Carousel from "./src/components/Carousel";
 import KnownTileCamera from "./src/pages/map/KnownTileCamera"
+import Rewards from "./src/pages/scoreboard/Rewards";
+
 //import MapModal from "./components/MapModal"
 //import { AuthContext } from "./context";
 
@@ -94,6 +96,17 @@ const ProfileStack = () => {
   );
 };
 
+const ScoreboardStack = () => {
+  return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <MapStack.Navigator initialRouteName="Scoreboard">
+        <Tab.Screen name="Scoreboard" component={Scoreboard} options={{ headerShown: false }} />
+        <Tab.Screen name="Rewards" component={Rewards} options={{ headerShown: false }} />
+      </MapStack.Navigator>
+    </GestureHandlerRootView>
+  );
+};
+
 function TabRoutes() {
   /*const [loaded] = useFonts({
       NotoSans: require('../assets/fonts/NotoSans-Bold.ttf'),
@@ -146,7 +159,7 @@ function TabRoutes() {
         },
       }}
     >
-      <Tab.Screen name="Scoreboard" component={Scoreboard}
+      <Tab.Screen name="ScoreboardStack" component={ScoreboardStack}
         options={{
           tabBarLabel: 'Scoreboard', tabBarActiveTintColor: '#F5BB38',
           tabBarIcon: ({ size, color }) => (

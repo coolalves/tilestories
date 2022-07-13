@@ -10,7 +10,7 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { initializeApp } from "firebase/app";
 import firebaseConfig from "../../../firebase-config";
 import { doc, getDoc, getFirestore } from "firebase/firestore";
- 
+import { useNavigation } from '@react-navigation/native';
 import Pressable from 'react-native/Libraries/Components/Pressable/Pressable';
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
@@ -20,6 +20,7 @@ const auth = getAuth();
 
 export default function Scoreboard() {
 
+  const navigation = useNavigation();
   const [userDoc, setUserDoc] = useState(null)
   //const [useruid, setUserUid] = useState(undefined)
   const [useremail, setUserEmail] = useState(null)
@@ -95,7 +96,7 @@ export default function Scoreboard() {
 
 
   return (
-    <View style={{backgroundColor:"#F2F2F2", height:"100%"}} >
+    <View style={{ backgroundColor: "#F2F2F2", height: "100%" }} >
       <View style={styles.header}></View>
 
       <View>
@@ -168,14 +169,14 @@ export default function Scoreboard() {
 
       </View>
 
-      <View  style={{top: 80, alignContent:"center" }}>
+      <View style={{ top: 80, alignContent: "center" }}>
 
         <Text style={styles.mytitle}>
           My Stats
         </Text>
-        <View style={{ backgroundColor: "transparent", top: 100, alignContent:"center" }}>
+        <View style={{ backgroundColor: "transparent", top: 100, alignContent: "center" }}>
 
-          <View  style={{top:-40}}>
+          <View style={{ top: -40 }}>
             <Image style={styles.avatar} source={{ uri: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png' }} />
             <View style={styles.textContainer}>
               <Text style={styles.myusername}>
@@ -185,8 +186,8 @@ export default function Scoreboard() {
                 160 points
               </Text>
               <View style={styles.rewardsContainer}>
-                <Pressable style={styles.rewards}>
-                  <Text style={{ textAlign: "center", fontSize: 16,   color: "white", fontWeight:"bold" }} >
+                <Pressable style={styles.rewards} onPress={()=>navigation.navigate('Rewards')}>
+                  <Text style={{ textAlign: "center", fontSize: 16, color: "white", fontWeight: "bold" }} >
                     rewards
                   </Text>
                 </Pressable>
@@ -206,7 +207,7 @@ export default function Scoreboard() {
 const styles = StyleSheet.create({
   header: {
     backgroundColor: "#5C75DD",
-    height: Dimensions.get("window").height/3 +100,
+    height: Dimensions.get("window").height / 3 + 100,
     width: Dimensions.get("window").width,
     position: "absolute"
   },
@@ -221,7 +222,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     top: 70,
-    padding:40,
+    padding: 40,
     textAlign: "center",
     color: "#111111"
   },
@@ -236,7 +237,7 @@ const styles = StyleSheet.create({
     width: Dimensions.get("window").width / 3,
     height: 200,
     borderRadius: 10,
-    top:23
+    top: 23
   },
   avatar: {
     width: 100,
@@ -313,9 +314,9 @@ const styles = StyleSheet.create({
     padding: 10,
     elevation: 2,
     borderRadius: 100,
-    backgroundColor:"#F5BB38"
+    backgroundColor: "#F5BB38"
   },
-  
+
 
   ranking: {
     alignContent: "center",
@@ -327,10 +328,10 @@ const styles = StyleSheet.create({
   },
   rewards: {
     alignContent: "center",
-     
+
     width: 75,
     height: 25,
-    
+
 
   },
 
