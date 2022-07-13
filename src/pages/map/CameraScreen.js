@@ -105,7 +105,7 @@ export default function CameraScreen(location) {
 
             await uploadBytes(refi, bytes); //upload images to users
             await uploadBytes(refi2, bytes); //upload images to toApprove
-
+            navigation.navigate('Congratulations')
 
         }
 
@@ -122,7 +122,7 @@ export default function CameraScreen(location) {
                 <Image style={[styles.preview, styles.photoo]} source={{ uri: "data:image/jpg;base64," + photo.base64 }} />
                 <View style={{ top: -140, width: Dimensions.get("window").width, height: 0, alignContent: "center" }}>
                     <Pressable style={styles.buttonContainer2} onPress={sharePhoto} >
-                        <Text style={styles.buttonText}> Share</Text>
+                        <Text style={styles.buttonText}> Submit</Text>
                     </ Pressable>
 
 

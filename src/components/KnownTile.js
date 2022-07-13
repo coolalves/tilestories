@@ -4,11 +4,21 @@ import { Marker, Callout } from "react-native-maps";
 import { Ionicons } from '@expo/vector-icons';
 import { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useNavigation } from "@react-navigation/native";
 
 
 const KnownTile = (props) => {
 
+    const navigation = useNavigation();
+
     const [modalVisible, setModalVisible] = useState(false);
+    console.log("props")
+
+    function navigateAndHide(){
+        
+        navigation.navigate('Tile', props.id, props.coord);
+        setModalVisible(false);
+    }
 
     return (
         <SafeAreaView>
@@ -32,7 +42,7 @@ const KnownTile = (props) => {
                             <View style={styles.openBtnContainer}>
                                 <Pressable
                                     style={[styles.button, styles.buttonOpenDetail]}
-
+                                    onPress={() =>  navigateAndHide()}
                                 >
                                     <Text style={styles.btnTextStyle}>See details</Text>
                                 </Pressable>
@@ -54,10 +64,7 @@ const KnownTile = (props) => {
 
             </View>
             <Marker
-                coordinate={{
-                    latitude: 40.62550,
-                    longitude: -8.64983,
-                }}
+                coordinate={props.coords}
 
                 image={require("../../assets/imgs/tileicon.png")}
                 onPress={() => setModalVisible(true)}
@@ -97,7 +104,7 @@ const styles = StyleSheet.create({
         padding: 12,
         elevation: 2,
         top: 10,
-        borderRadius: 100
+
     },
 
     buttonClose: {

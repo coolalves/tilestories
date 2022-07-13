@@ -30,6 +30,8 @@ var loca = [];
 var idazul = [];
 
 
+
+
 export default function Map({ navigation: { navigate } }) {
 
     const mapRef = React.createRef();
@@ -66,6 +68,8 @@ export default function Map({ navigation: { navigate } }) {
 
     }
 
+
+
     const pullinfo2 = async (uid) => {
         console.log("meu dasdadasd", uid);
         const myazulejo = query(collection(db, "users", "1zKntAPZNhS1pHGRbZyGRJ78AlM2", "azulejo"))
@@ -87,7 +91,13 @@ export default function Map({ navigation: { navigate } }) {
             console.log("id's dos azulejos", idazul);
             //geodescoberto(idazul);
         }
+
+
+
     }
+
+
+
 
     const pullinfo = async () => {
 
@@ -110,27 +120,8 @@ export default function Map({ navigation: { navigate } }) {
 
     }
 
-    // const myDoc = collection(db, "azulejo")
 
 
-
-
-
-
-    //console.log(tileDoc.geo);
-
-    /* const getUserLocation = async () =>{
-         let { status } = await Location.requestForegroundPermissionsAsync();
-             if (status !== 'granted') {
-                 setErrorMsg('Permission to access location was denied');
-                 return;
-             }
-             let location = await Location.getCurrentPositionAsync({
-                 accuracy: Location.Accuracy.Balanced,
-                 enableHighAccuracy: true,
-                 timeInterval: 5
-             });
-     } */
 
     useEffect(() => {
         (async () => {
@@ -162,32 +153,10 @@ export default function Map({ navigation: { navigate } }) {
 
 
 
-    /*  const CameraButton = () => {
-         if (distanceToTile > 50 || distanceToTile == null) {
-             return (<Pressable
-                 onPress={() =>
-                     farFromTile() //o utilizador está a mais de 50m do azulejo por isso não pode tentar fotografar
-                 }
-                 style={buttonstyles.buttonContainer}
-             >
-                 <MaterialIcons name="add-a-photo" size={28} color="#d1d1d1" />
-             </Pressable >
-             )
-         } else return (<Pressable
-             onPress={() =>
-                 passLocationToCamera()
-             }
-             style={buttonstyles.buttonContainer}
-         >
-             <MaterialIcons name="add-a-photo" size={28} color="grey" />
-         </Pressable >)
-
-     };*/
-
     const AddTile = () => {
         return (<Pressable
             onPress={() =>
-                passLocationToCamera()
+                passLocationToUnknownCamera()
             }
             style={buttonstyles.buttonContainer}
         >
@@ -204,7 +173,7 @@ export default function Map({ navigation: { navigate } }) {
         ])
     }
 
-    const passLocationToCamera = async (manitos) => {
+    const passLocationToUnknownCamera = async (manitos) => {
         let { status } = await Location.requestForegroundPermissionsAsync();
         try {
             if (status !== 'granted') {
@@ -221,8 +190,24 @@ export default function Map({ navigation: { navigate } }) {
         navigate('Camera', { location, manitos });
     } //vai buscar a ultima localização conhecida do utilizador para passar via props para o componente da camara e posteriormente abre a camera
 
-    //console.log(location)
+    const passLocationToCamera = async (manitos) => {
+        let { status } = await Location.requestForegroundPermissionsAsync();
+        try {
+            if (status !== 'granted') {
+                setErrorMsg('Permission to access location was denied');
+                return;
+            } else {
+                let location = await Location.getLastKnownPositionAsync();
+                setLocation(location);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+        //console.log(location);
+        navigate('KnownCamera', { location, manitos });
+    } //vai buscar a ultima localização conhecida do utilizador para passar via props para o componente da camara e posteriormente abre a camera
 
+    //console.log(location)
 
     const tileDistance = async (coordinates, manitos) => {
         console.log("cords la dentro", coordinates);
@@ -264,33 +249,9 @@ export default function Map({ navigation: { navigate } }) {
         navigate('Tile', { title });
     };
 
-    //let userLatitude = userLocation.coords.latitude;
-    //let userLongitude = userLocation.coords.longitude;
-    //console.log(userLatitude + userLongitude + "deu")
     let markerTitle = "Old train station";
 
 
-    /* let markerjsx
-     if (geoo === undefined){
-         console.log("loading out....")
-     }else{
-         console.log("geos",geoo.latitude)
-         console.log("geo2",geoo.longitude)
-         markerjsx=<CustomMarker tileDistance={tileDistance} coords={{ latitude: geoo.latitude, longitude: geoo.longitude }} />
-     }*/
-
-    /* if (geoo===undefined){
-         console.log("its loading");
-     }else{
-         for (let i=1; i<=numeroazul; i++){
-
-             var sti=toString(i);
-
-             locaa[i]=geoo.sti.geo.latitude
-             locao[i]=geoo.sti.geo.longitude
-         }
-         console.log("esta é a loca", locaa);
-     }*/
 
 
 
@@ -304,7 +265,7 @@ export default function Map({ navigation: { navigate } }) {
 
             if (newarray.includes(i)) {
                 console.log("estou aqusi", userDataArray[i].geo.latitude)
-                loca[i] = <KnownTile key={i} coords={{ latitude: userDataArray[i].geo.latitude, longitude: userDataArray[i].geo.longitude }}></KnownTile>
+                loca[i] = <KnownTile key={i} id={userDataArray[i].id} coords={{ latitude: userDataArray[i].geo.latitude, longitude: userDataArray[i].geo.longitude }}></KnownTile>
             } else {
                 loca[i] = <UnknownTile key={i} id={userDataArray[i].id} tileDistance={tileDistance} coords={{ latitude: userDataArray[i].geo.latitude, longitude: userDataArray[i].geo.longitude }} />
             }
@@ -313,7 +274,7 @@ export default function Map({ navigation: { navigate } }) {
 
     setTimeout(() => {
         setLoading(false) //this.props.navigation.navigate('Login')
-    }, 6000);
+    }, 5500);
 
     if (loading != false) {
         return (
