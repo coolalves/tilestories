@@ -8,7 +8,7 @@ import { Picker } from '@react-native-picker/picker';
 import { shareAsync } from "expo-sharing";
 import Pressable from "react-native/Libraries/Components/Pressable/Pressable";
 import { getStorage, ref, uploadBytes, } from 'firebase/storage';
-import { doc, setDoc, getDoc, updateDoc } from "firebase/firestore";
+import { doc, setDoc, getDoc, updateDoc, getDocs, collection } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
 import { initializeApp } from "firebase/app";
 import { Ionicons } from '@expo/vector-icons';
@@ -36,11 +36,17 @@ const db = getFirestore(app);
 const storage = getStorage(app);
 const auth = getAuth();
 var uid;
+var lat,long;
+var nomefoto;
 
 
 export default function CameraScreen(location) {
 
-    console.log("teste", location.route.params.manitos);
+
+
+    console.log("teste", location.route.params.location.coords.latitude);
+ lat=location.route.params.location.coords.latitude;
+ long=location.route.params.location.coords.longitude;
     //console.log("blabla",location);
     idazulii = location.route.params.manitos;
     console.log(location);
@@ -51,6 +57,9 @@ export default function CameraScreen(location) {
     const [selectedValue, setSelectedValue] = useState("preserved");
     const navigation = useNavigation();
     const [description, setDescription] = useState("")
+    const [userDataArray, setUserDataArray] = useState([]);
+
+    console.log("aqui2")
 
     onAuthStateChanged(auth, (user) => {
         if (user) {
@@ -60,6 +69,31 @@ export default function CameraScreen(location) {
             // User is signed out
         }
     });
+
+
+    const pullinfo=async ()=> {
+        await getDocs(collection(db, "newtile"))
+            .then((querySnapshot) => {
+                const newUserDataArray = querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+                setUserDataArray(newUserDataArray);
+            })
+            .catch((err) => {
+
+                // TODO: Handle errors
+                console.error("Failed to retrieve data", err);
+            });
+        console.log("aqui1")
+    }
+
+    useEffect(() => {
+        (async () => {
+            pullinfo();
+        })();
+    }, []);
+
+
+
+
 
     useEffect(() => {
         (async () => {
@@ -80,7 +114,7 @@ export default function CameraScreen(location) {
 
     let takePhoto = async () => {
         let options = {
-            quality: 0.1,
+            quality: 1,
             base64: true,
 
         };
@@ -95,17 +129,18 @@ export default function CameraScreen(location) {
             const storage = getStorage(); //the storage itself
 
             console.log(idazulii,"idazuli")
+            console.log("aqui3")
+            nomefoto=userDataArray.length + "." + uid  + '.jpg';
 
-            const refi = ref(storage, 'users/' + uid + "/" + idazulii + "." + uid + '.jpg');
-            const refi2 = ref(storage, 'toApprove/' + idazulii + "." + uid + '.jpg');
+            const refi2 = ref(storage, 'newTile/' + userDataArray.length + "." + uid  + '.jpg');
             //convert image to array of bytes
             const img = await fetch(photo.uri);
             console.log("img3");
 
             const bytes = await img.blob();
 
-            await uploadBytes(refi, bytes); //upload images to users
-            await uploadBytes(refi2, bytes); //upload images to toApprove
+
+            await uploadBytes(refi2, bytes); //upload images to newTile
             navigation.navigate('Congratulations')
 
         }
@@ -118,11 +153,47 @@ export default function CameraScreen(location) {
             });
         };
 
+const send = () =>{
+        const myDoc = doc(db, "newtile/"+userDataArray.length)
+        console.log("user data array",userDataArray[0]);
+        // Your Document Goes Here
+        const docData = {
+            "description": description,
+            "difficulty": "to be decided",
+            "geo": {
+                "latitude":lat,
+                "longitude":long
+            },
+            "name": "name",
+            "photo": nomefoto,
+            "points": "1",
+            "summary": "summary",
+            "uid": userDataArray.length,
+            "visits": "1",
+            "state":selectedValue,
+        }
+
+        setDoc(myDoc, docData)
+            // Handling Promises
+            .then(() => {
+                // MARK: Success
+                console.log('vai para o firebase!!');
+            })
+            .catch((error) => {
+                // MARK: Failure
+                alert(error.message)
+            })
+    }
+        const combo =async()=> {
+            await sharePhoto();
+            await send();
+        }
+
         return (
             <SafeAreaView style={styles.cameraContainer}>
                 <Image style={[styles.preview, styles.photoo]} source={{ uri: "data:image/jpg;base64," + photo.base64 }} />
                 <View style={{ top: -140, width: Dimensions.get("window").width, height: 0, alignContent: "center" }}>
-                    <Pressable style={styles.buttonContainer2} onPress={sharePhoto} >
+                    <Pressable style={styles.buttonContainer2} onPress={combo} >
                         <Text style={styles.buttonText}> Submit</Text>
                     </ Pressable>
 

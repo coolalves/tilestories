@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
         flex: 1,
         left: "2%",
         
-        padding: 4,
+
         zIndex: 2,
     },
     buttonOpen: {

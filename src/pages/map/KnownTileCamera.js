@@ -79,7 +79,7 @@ export default function KnownTile(location) {
 
     let takePhoto = async () => {
         let options = {
-            quality: 0.1,
+            quality: 1,
             base64: true,
 
         };
