@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     loadingFotinha: {
         marginBottom: 80,
         width: 300,
-        height: 300
+        height: 210
     },
     loadingTextBranco: {
         color: 'white',
