@@ -28,6 +28,7 @@ const db = getFirestore(app);
 const auth = getAuth();
 var loca = [];
 var idazul = [];
+var ispa=0;
 
 
 
@@ -59,7 +60,7 @@ export default function Map({ navigation: { navigate } }) {
         await onAuthStateChanged(auth, (user) => {
             if (user) {
                 setuid(user.uid);
-                pullinfo2(user.uid);
+                 pullinfo2(user.uid);
 
             } else {
                 // User is signed out
@@ -72,7 +73,7 @@ export default function Map({ navigation: { navigate } }) {
 
     const pullinfo2 = async (uid) => {
         console.log("meu dasdadasd", uid);
-        const myazulejo = query(collection(db, "users", "1zKntAPZNhS1pHGRbZyGRJ78AlM2", "azulejo"))
+        const myazulejo = query(collection(db, "users", uid, "azulejo"))
 
         //const workQ = query(collection(db, `users/${elem.id}/workInfo`))
         const azuliiii = await getDocs(myazulejo)
@@ -82,22 +83,23 @@ export default function Map({ navigation: { navigate } }) {
         setAzulcollection(workInfo);
 
 
-        console.log("estes são os meus azulejosssss", azulcollection[0]);
-        const descobertos = azulcollection.length;
-        if (descobertos > 0) {
-            for (let i = 0; i < descobertos; i++) {
-                idazul[i] = azulcollection[i].id;
-            }
-            console.log("id's dos azulejos", idazul);
-            //geodescoberto(idazul);
-        }
+        console.log("estes são os meus azulejos", azulcollection[0]);
+
+
+
 
 
 
     }
 
+    const descobertos = azulcollection.length;
+    if (descobertos > 0) {
+        for (let i = 0; i < descobertos; i++) {
+            idazul[i] = azulcollection[i].id;
+        }
+        console.log("id's dos azulejos", idazul);
 
-
+    }
 
     const pullinfo = async () => {
 
@@ -120,7 +122,9 @@ export default function Map({ navigation: { navigate } }) {
 
     }
 
-
+    if (uid==undefined){
+        pullinfo2();
+    }
 
 
     useEffect(() => {
@@ -251,12 +255,16 @@ export default function Map({ navigation: { navigate } }) {
 
     let markerTitle = "Old train station";
 
-
-
+    if (azulcollection[0]==undefined ){
+        ispa++;
+        if (ispa<20){
+        pullinfo2();
+        }
+    }
 
 
     if (userDataArray.length == 0) {
-        console.log("loading...");
+        console.log("loading....");
     } else {
 
         let newarray = [];
@@ -264,8 +272,9 @@ export default function Map({ navigation: { navigate } }) {
         for (let i = 0; i < userDataArray.length; i++) {
 
             if (newarray.includes(i)) {
+
                 console.log("estou aqusi", userDataArray[i].geo.latitude)
-                loca[i] = <KnownTile key={i} id={userDataArray[i].id} coords={{ latitude: userDataArray[i].geo.latitude, longitude: userDataArray[i].geo.longitude }}></KnownTile>
+                loca[i] = <KnownTile key={i} img={userDataArray[i].photo} name={userDataArray[i].name} id={userDataArray[i].id} coords={{ latitude: userDataArray[i].geo.latitude, longitude: userDataArray[i].geo.longitude }}></KnownTile>
             } else {
                 loca[i] = <UnknownTile key={i} id={userDataArray[i].id} tileDistance={tileDistance} coords={{ latitude: userDataArray[i].geo.latitude, longitude: userDataArray[i].geo.longitude }} />
             }

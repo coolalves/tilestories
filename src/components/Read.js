@@ -36,6 +36,19 @@ const Read = () => {
             })
     }
 
+
+    function func2(imag) {
+
+
+        const reference = ref(storage, 'toApprove/'+imag);
+        console.log("apanha aqui2", imag);
+
+        getDownloadURL(reference).then((x) => {
+            setUrll(x);
+        })
+
+    }
+
     return(
         <View>
             <Button title='Read Doc' onPress={doIT}></Button>

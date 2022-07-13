@@ -29,13 +29,15 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "C:/Users/Tof/Desktop/backoffice",
+    "last_opened_file_path": "C:/Users/Tof/Desktop/tilestories/assets/imgs/places",
     "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "web-ide.project.structure",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Tof\Desktop\tilestories\assets\imgs\places" />
       <recent name="C:\Users\Tof\Desktop\tilestories" />
     </key>
   </component>
@@ -65,6 +67,9 @@
       <workItem from="1657464827780" duration="1372000" />
       <workItem from="1657512344752" duration="2685000" />
       <workItem from="1657550536342" duration="42000" />
+      <workItem from="1657687498568" duration="75000" />
+      <workItem from="1657687576634" duration="2716000" />
+      <workItem from="1657690445045" duration="24551000" />
     </task>
     <servers />
   </component>

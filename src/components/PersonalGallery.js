@@ -1,8 +1,19 @@
 import * as React from "react";
 import { View, Pressable, StyleSheet, Text } from "react-native";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ImageGallery } from '@georstat/react-native-image-gallery';
 import { Ionicons } from '@expo/vector-icons';
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { initializeApp } from "firebase/app";
+import firebaseConfig from "../../firebase-config";
+import {collection, doc, getDoc, getDocs, getFirestore} from "firebase/firestore";
+import { getStorage, ref, getDownloadURL } from "firebase/storage";
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth();
+const storage = getStorage();
+
+var imags=[];
 
 
 const images = [
@@ -25,11 +36,21 @@ const images = [
 ];
 
 export const PersonalGallery = () => {
+
+    const [useruid, setuid] = useState(null);
+    const [userDoc, setUserDoc] = useState(null);
+    const [userazul, setUserAzul] = useState(null);
+
+
+    console.log("estou aqui desntrooooo");
     const [isOpen, setIsOpen] = useState(false);
     const openGallery = () => setIsOpen(true);
     const closeGallery = () => setIsOpen(false);
     const exitGallery = () => {
         closeGallery(true)
+
+
+
     }
 
     return (
@@ -59,7 +80,7 @@ export const PersonalGallery = () => {
                     
                 </View>
                 <Text style={{color:"white", position:"absolute", fontSize:30, flex:1, zIndex:3}}>
-                        aaaaaaaaaaaa
+
                     </Text>
             </ImageGallery>
 
@@ -148,4 +169,5 @@ const styles = StyleSheet.create({
 
     }
 })
+
 

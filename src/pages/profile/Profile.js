@@ -9,59 +9,81 @@ import {
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { initializeApp } from "firebase/app";
 import firebaseConfig from "../../../firebase-config";
-import { doc, getDoc, getFirestore } from "firebase/firestore";
+import {collection, doc, getDoc, getDocs, getFirestore} from "firebase/firestore";
 import { SimpleLineIcons } from '@expo/vector-icons';
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth();
 
-
+var nomi;
+var email;
+var register;
+var points;
+var descobertos;
 
 export default function Profile({ navigation: { navigate } }) {
 
   const [userDoc, setUserDoc] = useState(null)
   //const [useruid, setUserUid] = useState(undefined)
   const [useremail, setUserEmail] = useState(null)
-  const [userName, setUserName] = useState(null)
+  const [userazul, setUserAzul] = useState(null)
 
-  const useruid = "4to1jIMqQAYtyBZHZFYzlF9gvIP2";
-  var nomi;
-  var email;
-  var register;
+  const [useruid, setuid] = useState(null);
 
-
-
-
-  const buscaruid = () => {
-
-    onAuthStateChanged(auth, (user) => {
+  const chamauid = async () => {
+    await onAuthStateChanged(auth, (user) => {
       if (user) {
-        setUserUid(user.uid);
-        console.log("useruid", useruid);
+        setuid(user.uid);
+
 
       } else {
         // User is signed out
       }
     });
+    await doIt();
+    await doIT2();
+
   }
 
-  //buscaruid();
+  console.log("uid", useruid);
 
 
+  useEffect(() => {
+    (async () => {
+      await chamauid();
+    })();
+  }, []);
+
+  const doIT2 = async ()=>{
+
+    getDocs(collection(db, "users",useruid,"azulejo"))
+        .then((querySnapshot) => {
 
 
-  const doIT = async () => {
+          const newUserDataArray = querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
 
-    // You can read what ever document by changing the collection and document path here
-    const myDoc = doc(db, "users", useruid)
+          setUserAzul(newUserDataArray);
+        })
+        .catch((err) => {
 
-    getDoc(myDoc)
+          // TODO: Handle errors
+          console.error("Failed to retrieve data", err);
+        });
+
+  }
+
+
+const doIt = async ()=>{
+
+  // You can read what ever document by changing the collection and document path here
+  const myDoc = doc(db, "users", useruid)
+
+  getDoc(myDoc)
       // Handling Promises
       .then((snapshot) => {
         // MARK: Success
         if (snapshot.exists) {
           setUserDoc(snapshot.data())
-
         }
         else {
           alert("No Doc Found")
@@ -71,28 +93,26 @@ export default function Profile({ navigation: { navigate } }) {
         // MARK: Failure
         alert(error.message)
       })
+}
 
-  }
-
-  useEffect(() => {
-    (() => {
-      doIT()
-    })();
-  }, []);
+console.log("userdoc", userDoc);
 
 
-  console.log("aqui", userDoc);
 
-  if (userDoc == null) {
-    console.log("loadong")
+
+  if (userDoc == null || userazul==undefined) {
+    console.log("loading")
+    chamauid();
+    doIT2();
+
   } else {
     nomi = userDoc.name;
     email = userDoc.email;
     register = userDoc.resgisterDate;
+    points= userDoc.points;
+    descobertos= userazul.length -1;
+
   }
-
-
-
 
   return (
 
@@ -112,11 +132,11 @@ export default function Profile({ navigation: { navigate } }) {
             <Image style={styles.avatar} source={{ uri: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png' }} />
             <View style={styles.textContainer}>
               <Text style={styles.myusername}>
-                Username
+                {nomi}
               </Text>
 
               <Text style={styles.since} >
-                Member since july 2022
+                {register}
               </Text>
 
               <View style={{ alignContent: "center", top: 470 }}>
@@ -131,10 +151,10 @@ export default function Profile({ navigation: { navigate } }) {
                   Progress
                 </Text>
                 <Text style={styles.title3}>
-                  160 points
+                  {points} points
                 </Text>
                 <Text style={styles.title3}>
-                  12 tiles discovered
+                  {descobertos} tiles discovered
                 </Text>
                 <Text style={styles.title3}>
                   2 new tiles added

@@ -2,6 +2,10 @@ import React, { useState } from "react";
 import { Alert, Modal, StyleSheet, Text, Pressable, View, Image } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
 
+var contador=0;
+var propi;
+var imaaa= undefined;
+
 
 const MapModal = () => {
     const [modalVisible, setModalVisible] = useState(false);
@@ -83,7 +87,7 @@ const styles = StyleSheet.create({
         padding: 12,
         elevation: 2,
         top: 10,
-        borderRadius: 100
+
     },
     buttonOpen: {
         backgroundColor: "#F194FF",

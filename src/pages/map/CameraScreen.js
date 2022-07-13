@@ -94,6 +94,7 @@ export default function CameraScreen(location) {
 
             const storage = getStorage(); //the storage itself
 
+            console.log(idazulii,"idazuli")
 
             const refi = ref(storage, 'users/' + uid + "/" + idazulii + "." + uid + '.jpg');
             const refi2 = ref(storage, 'toApprove/' + idazulii + "." + uid + '.jpg');

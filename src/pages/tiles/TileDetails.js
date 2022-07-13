@@ -6,47 +6,88 @@ import { useState, useEffect } from "react";
 import { getFirestore } from "firebase/firestore";
 import { initializeApp } from "firebase/app";
 import firebaseConfig from "../../../firebase-config";
+import { getStorage, ref, getDownloadURL, listAll, list, deleteObject } from 'firebase/storage';
 
 import { initializeFirestore } from 'firebase/firestore';
 
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-
+const storage = getStorage(app);
+var diff,name,points,visits,summary,descricao;
+var contador=0;
+var propi;
 
 
 export default function TileDetails(props) {
+
+    if (props.id!==propi){
+        contador=0;
+        propi=props.id;
+    }
+
+
+    console.log("olha o props2", props.route.params)
     console.log("helo", props.route.params)
 
-    const [userDoc, setUserDoc] = useState(null)
 
+    const [userDoc, setUserDoc] = useState(null)
+    const [url, setUrl] = useState(null)
+
+    function doIT(props) {
+
+        // You can read what ever document by changing the collection and document path here
+        const myDoc = doc(db, "azulejo", props.route.params)
+
+        getDoc(myDoc)
+            // Handling Promises
+            .then((snapshot) => {
+                // MARK: Success
+                if (snapshot.exists) {
+                    setUserDoc(snapshot.data())
+                }
+                else {
+                    alert("No Doc Found")
+                }
+            })
+            .catch((error) => {
+                // MARK: Failure
+                alert(error.message)
+            })
+
+
+    }
+    console.log("tem aqui a informação toda", userDoc);
 
     useEffect(() => {
-        function doIT() {
-
-            // You can read what ever document by changing the collection and document path here
-            const myDoc = doc(db, "azulejo", props.route.params)
-
-            getDoc(myDoc)
-                // Handling Promises
-                .then((snapshot) => {
-                    // MARK: Success
-                    if (snapshot.exists) {
-                        setUserDoc(snapshot.data())
-                    }
-                    else {
-                        alert("No Doc Found")
-                    }
-                })
-                .catch((error) => {
-                    // MARK: Failure
-                    alert(error.message)
-                })
-            console.log("tem aqui a informação toda", userDoc);
-
+        if (contador<2){
+            console.log(contador)
+            contador++
+            doIT(props);
         }
-
     });
+
+    const func = async (foto) => {
+
+
+        const reference = ref(storage, 'official/'+foto);
+
+        await getDownloadURL(reference).then((x) => {
+            setUrl(x);
+        })
+
+
+    }
+
+    if (userDoc!==null){
+        diff=userDoc.difficulty;
+        name=userDoc.name;
+        points=userDoc.points;
+        visits=userDoc.visits;
+        summary=userDoc.summary;
+        descricao=userDoc.description
+        func(userDoc.photo)
+    }
 
 
 
@@ -55,7 +96,7 @@ export default function TileDetails(props) {
             <ScrollView>
                 <View style={{ alignItems: 'center', marginHorizontal: 30 }}>
                     <View style={styles.header} />
-                    <Image style={styles.tileImg} source={require('../../../assets/imgs/places/station.jpg')} />
+                    <Image style={styles.tileImg} source={{uri:url}} />
 
 
 
@@ -63,13 +104,13 @@ export default function TileDetails(props) {
 
 
                     <View style={styles.aboutUser}>
-                        <Text style={styles.tileName}>{props.route.params.title}Titulo</Text>
+                        <Text style={styles.tileName}>{props.route.params.title}{name}</Text>
                         <Text style={styles.tileStatsTitle}>Difficulty</Text>
-                        <Text style={styles.tileStats}>Easy</Text>
+                        <Text style={styles.tileStats}>{diff}</Text>
                         <Text style={styles.tileStatsTitle}>Points</Text>
-                        <Text style={styles.tileStats}>10</Text>
+                        <Text style={styles.tileStats}>{points}</Text>
                         <Text style={styles.tileStatsTitle}>Visits</Text>
-                        <Text style={styles.tileStats}>50</Text>
+                        <Text style={styles.tileStats}>{visits}</Text>
 
                     </View>
 
@@ -78,7 +119,7 @@ export default function TileDetails(props) {
                     </View>
 
                     <View style={{ width: Dimensions.get("window").width - 30, textAlign: "left", paddingTop: 3 }}>
-                        <Text style={styles.tileDescription}>Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum</Text>
+                        <Text style={styles.tileDescription}>{summary}</Text>
                     </View>
 
                     <View style={{ width: Dimensions.get("window").width - 30, textAlign: "left", paddingTop: 10, }}>
@@ -86,7 +127,7 @@ export default function TileDetails(props) {
                     </View>
 
                     <View style={{ width: Dimensions.get("window").width - 30, textAlign: "left", paddingTop: 3, height: 300 }}>
-                        <Text style={styles.tileDescription}>Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum</Text>
+                        <Text style={styles.tileDescription}>{descricao}</Text>
                     </View>
 
 

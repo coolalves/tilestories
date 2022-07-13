@@ -9,89 +9,160 @@ import {
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { initializeApp } from "firebase/app";
 import firebaseConfig from "../../../firebase-config";
-import { doc, getDoc, getFirestore } from "firebase/firestore";
+import {collection, doc, getDoc, getDocs, getFirestore} from "firebase/firestore";
 import { useNavigation } from '@react-navigation/native';
 import Pressable from 'react-native/Libraries/Components/Pressable/Pressable';
+
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth();
+var points,nomi,top1name,top2name,top3name;
+var top1=0;
+var top2=0;
+var top3=0;
+
+
 
 
 
 export default function Scoreboard() {
 
-  const navigation = useNavigation();
   const [userDoc, setUserDoc] = useState(null)
   //const [useruid, setUserUid] = useState(undefined)
   const [useremail, setUserEmail] = useState(null)
-  const [userName, setUserName] = useState(null)
-  const useruid = "4to1jIMqQAYtyBZHZFYzlF9gvIP2";
-  var nomi;
-  var email;
-  var register;
+  const [userDataArray, setUserDataArray] = useState([]);
 
+  const [useruid, setuid] = useState(null);
 
-
-
-  const buscaruid = () => {
-
-    onAuthStateChanged(auth, (user) => {
+  const chamauid = async () => {
+    await onAuthStateChanged(auth, (user) => {
       if (user) {
-        setUserUid(user.uid);
-        console.log("useruid", useruid);
+        setuid(user.uid);
+
 
       } else {
         // User is signed out
       }
     });
+    await doIt();
+
+
   }
 
-  //buscaruid();
+  const pullinfo = async () => {
+
+    await getDocs(collection(db, "users"))
+        .then((querySnapshot) => {
+
+
+          const newUserDataArray = querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+
+          setUserDataArray(newUserDataArray);
+        })
+        .catch((err) => {
+
+          // TODO: Handle errors
+          console.error("Failed to retrieve data", err);
+        });
+
+    console.log("arrayss", userDataArray[0]);
+
+  }
 
 
 
+  console.log("uid", useruid);
 
-  const doIT = async () => {
+
+  useEffect(() => {
+    (async () => {
+      await chamauid();
+    })();
+  }, []);
+
+
+  const doIt = async ()=>{
 
     // You can read what ever document by changing the collection and document path here
     const myDoc = doc(db, "users", useruid)
 
     getDoc(myDoc)
-      // Handling Promises
-      .then((snapshot) => {
-        // MARK: Success
-        if (snapshot.exists) {
-          setUserDoc(snapshot.data())
-
-        }
-        else {
-          alert("No Doc Found")
-        }
-      })
-      .catch((error) => {
-        // MARK: Failure
-        alert(error.message)
-      })
-
+        // Handling Promises
+        .then((snapshot) => {
+          // MARK: Success
+          if (snapshot.exists) {
+            setUserDoc(snapshot.data())
+          }
+          else {
+            alert("No Doc Found")
+          }
+        })
+        .catch((error) => {
+          // MARK: Failure
+          alert(error.message)
+        })
   }
 
-  useEffect(() => {
-    (() => {
-      doIT()
-    })();
-  }, []);
+  console.log("userdoc", userDoc);
 
 
-  console.log("aqui", userDoc);
 
-  if (userDoc == null) {
-    console.log("loadong")
+
+
+
+const topthree =()=>{
+
+  console.log("vou correr o for");
+
+                for (let i=0; i<userDataArray.length;i++){
+                  let acorrer=userDataArray[i].points;
+
+                  if (parseInt(acorrer)>top1){
+                    top1=parseInt(acorrer);
+                    top1name=userDataArray[i].name;
+                    continue;
+                  }
+
+                    if (parseInt(acorrer)>top2 && parseInt(acorrer)<top1){
+                      top2=parseInt(acorrer);
+                      top2name=userDataArray[i].name;
+                      continue;
+                    }
+
+                      if (parseInt(acorrer)>top3 && parseInt(acorrer)<top1 && parseInt(acorrer)<top2){
+                        top3=parseInt(acorrer);
+                        top3name=userDataArray[i].name;
+                        continue;
+                      }
+            }
+
+
+  console.log("dentro do for1",top1);
+  console.log("dentro do for2",top2);
+  console.log("dentro do for3",top3);
+
+}
+
+  if (userDataArray[0] == undefined ) {
+    pullinfo();
+  }
+  if (userDataArray[0]!=undefined){
+    topthree();
+  }
+
+
+  if (userDoc == null ) {
+    console.log("loadingd")
+    chamauid();
+
+
+
   } else {
     nomi = userDoc.name;
-    email = userDoc.email;
-    register = userDoc.resgisterDate;
-  }
+    points= userDoc.points;
 
+
+  }
 
 
 
@@ -102,7 +173,7 @@ export default function Scoreboard() {
       <View>
 
         <Text style={styles.title}>
-          Top Scorers
+          Top Scorerss
         </Text>
         <View style={{ flexDirection: "row", backgroundColor: "transparent", top: 100 }}>
 
@@ -110,10 +181,10 @@ export default function Scoreboard() {
             <Image style={styles.avatar} source={{ uri: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png' }} />
             <View style={styles.textContainer}>
               <Text style={styles.username}>
-                Username
+                {top2name}
               </Text>
               <Text style={styles.points}>
-                140 points
+                {top2.toString()} points
               </Text>
               <View style={styles.rankingContainer}>
                 <View style={styles.ranking}>
@@ -129,10 +200,10 @@ export default function Scoreboard() {
             <Image style={styles.avatar} source={{ uri: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png' }} />
             <View style={styles.textContainer}>
               <Text style={styles.username}>
-                Username
+                {top1name}
               </Text>
               <Text style={styles.points}>
-                180 points
+                {top1.toString()} points
               </Text>
               <View style={styles.rankingContainer}>
                 <View style={styles.ranking}>
@@ -149,10 +220,10 @@ export default function Scoreboard() {
             <Image style={styles.avatar} source={{ uri: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png' }} />
             <View style={styles.textContainer}>
               <Text style={styles.username}>
-                Username
+                {top3name}
               </Text>
               <Text style={styles.points}>
-                100 points
+                {top3.toString()} points
               </Text>
               <View style={styles.rankingContainer}>
                 <View style={styles.ranking}>
@@ -180,10 +251,10 @@ export default function Scoreboard() {
             <Image style={styles.avatar} source={{ uri: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png' }} />
             <View style={styles.textContainer}>
               <Text style={styles.myusername}>
-                Username
+                {nomi}
               </Text>
               <Text style={styles.mypoints}>
-                160 points
+                {points} points
               </Text>
               <View style={styles.rewardsContainer}>
                 <Pressable style={styles.rewards} onPress={()=>navigation.navigate('Rewards')}>

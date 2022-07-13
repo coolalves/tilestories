@@ -1,15 +1,27 @@
 import * as React from "react";
 import { View, Pressable, StyleSheet, Text, Image, Dimensions, FlatList } from "react-native";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ImageGallery } from '@georstat/react-native-image-gallery';
 import { Ionicons } from '@expo/vector-icons';
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { initializeApp } from "firebase/app";
+import firebaseConfig from "../../firebase-config";
+import {collection, doc, getDoc, getDocs, getFirestore} from "firebase/firestore";
+import { getStorage, ref, getDownloadURL } from "firebase/storage";
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth();
+const storage = getStorage();
+
 
 const { width: windowWidth, height: windowHeight } = Dimensions.get("window");
+var imags=[];
 
-const slideList = Array.from({ length: 30 }).map((_, i) => {
+const slideList = Array.from({ length: 3 }).map((_, i) => {
+    console.log("dddsdsdsdwwwwww",imags[i]);
     return {
         id: i,
-        image: `https://picsum.photos/1440/2842?random=${i}`,
+        image: imags[i],
         title: `Tile Name ${i + 1}`,
         subtitle: `Discovered/added: Jul 2022 ${i + 1}!`,
     };
@@ -39,13 +51,100 @@ function Slide({ data }) {
 }
 
 function Carousel() {
+    const [useruid, setuid] = useState(null);
+    const [userDoc, setUserDoc] = useState(null);
+    const [userazul, setUserAzul] = useState(null);
+
+    const chamauid = async () => {
+        await onAuthStateChanged(auth, (user) => {
+            if (user) {
+                setuid(user.uid);
+
+
+            } else {
+                // User is signed out
+            }
+        });
+        await doIt();
+
+    }
+
+    useEffect(() => {
+        (async () => {
+            await chamauid();
+        })();
+    }, []);
+
+
+    if (useruid == null) {
+        console.log("loading")
+        chamauid();
+
+    }
+
+    const doIt= async ()=>{
+
+        await getDocs(collection(db, "users",useruid,"azulejo"))
+            .then((querySnapshot) => {
+
+
+                const newUserDataArray = querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+
+                setUserAzul(newUserDataArray);
+            })
+            .catch((err) => {
+
+                // TODO: Handle errors
+                console.error("Failed to retrieve data", err);
+            });
+
+
+
+    }
+
+
+
+    function func2() {
+
+
+        for (let i=0; i<userazul.length; i++){
+            const reference = ref(storage, 'users/'+useruid+"/"+userazul[i].photo);
+
+
+            getDownloadURL(reference).then((x) => {
+
+                imags[i]={
+                    id: i,
+                    image: x,
+                    //title: `Tile Name ${i + 1}`,
+                    //subtitle: `Discovered/added: Jul 2022 ${i + 1}!`,
+                };
+                console.log("dadada",imags[i]);
+            })
+        }
+
+    }
+
+    if(userazul==null){
+        doIt()
+    }else{
+        func2();
+    }
+
+    console.log(useruid);
+
+
+
+    console.log("estou aqui")
+    {console.log("estou no flatlist",imags)}
     return (
         <>
 
 
 
             <FlatList
-                data={slideList}
+
+                data={imags}
                 style={{ flex: 1, backgroundColor: "#5C75DD" }}
                 renderItem={({ item }) => {
                     return <Slide data={item} />;

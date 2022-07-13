@@ -2,28 +2,72 @@ import * as React from "react";
 import { Alert, Modal, StyleSheet, Text, Pressable, View, Image } from "react-native";
 import { Marker, Callout } from "react-native-maps";
 import { Ionicons } from '@expo/vector-icons';
-import { useState } from "react";
+
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
+import {initializeApp} from "firebase/app";
+import firebaseConfig from "../../firebase-config";
+import {getFirestore} from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
+import { useState, useEffect } from "react";
+import { getStorage, ref, getDownloadURL, listAll, list, deleteObject } from 'firebase/storage';
+var name;
+var img;
+
+const app = initializeApp(firebaseConfig);
+const storage = getStorage(app);
+
+
 
 
 const KnownTile = (props) => {
 
-    const navigation = useNavigation();
+    const [url, setUrl] = useState(null)
+
+
+name=props.name;
+img=props.img;
+
+    const func = async (foto) => {
+
+
+        const reference = ref(storage, 'official/'+foto);
+
+        await getDownloadURL(reference).then((x) => {
+            setUrl(x);
+        })
+
+
+    }
+
+    useEffect(() => {
+       func(img);
+    }, []);
+
+
+
 
     const [modalVisible, setModalVisible] = useState(false);
-    console.log("props")
 
-    function navigateAndHide(){
-        
-        navigation.navigate('Tile', props.id, props.coord);
-        setModalVisible(false);
-    }
+
+        const navigation = useNavigation();
+
+
+        console.log("props", props.id)
+
+        function navigateAndHide() {
+
+            console.log("olah o props", props.id);
+            navigation.navigate('Tile', props.id, props.coord);
+            setModalVisible(false);
+        }
+
+
 
     return (
         <SafeAreaView>
             <View style={styles.centeredView}>
-                <Modal
+                <Modal id={props.id}
                     animationType="slide"
                     transparent={true}
                     visible={modalVisible}
@@ -35,9 +79,9 @@ const KnownTile = (props) => {
                     <View style={styles.centeredView}>
                         <View style={styles.modalView}>
                             <View style={styles.tileImgView}>
-                                <Image style={styles.tileImg} source={require('../../assets/imgs/places/station.jpg')} />
+                                <Image style={styles.tileImg} source={{uri:url}} />
                             </View>
-                            <Text style={styles.modalText}>Old train station</Text>
+                            <Text style={styles.modalText}>{name}</Text>
                             <Text style={styles.modalText2}>Already visited</Text>
                             <View style={styles.openBtnContainer}>
                                 <Pressable

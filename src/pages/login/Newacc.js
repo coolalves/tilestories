@@ -34,7 +34,8 @@ const Login = ({ navigation: { navigate } }) => {
                     "email": user.email,
                     "name": username,
                     "uid": user.uid,
-                    "resgisterDate": user.metadata.creationTime
+                    "resgisterDate": user.metadata.creationTime,
+                    "points":"0"
                 }
 
                 setDoc(myDoc, docData)

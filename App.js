@@ -11,6 +11,7 @@ import TileDetails from "./src/pages/tiles/TileDetails";
 import Newacc from "./src/pages/login/Newacc";
 import Login from "./src/pages/login/Login";
 import Landing from "./src/pages/login/Landing";
+import {PersonalGallery} from "./src/components/PersonalGallery";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 //import { useFonts } from 'expo-font';
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -80,6 +81,7 @@ const MapStackNavigator = () => {
         <MapStack.Screen name="KnownCamera" component={KnownTileCamera} options={{ headerShown: false }} />
         <MapStack.Screen name="Tile" component={TileDetails} options={{ headerShown: false }} />
         <MapStack.Screen name="Congratulations" component={Congratulations} options={{ headerShown: false }} />
+          <MapStack.Screen name="Gallery" component={PersonalGallery} options={{ headerShown: false }} />
       </MapStack.Navigator>
     </GestureHandlerRootView>
   );
